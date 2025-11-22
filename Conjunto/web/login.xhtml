@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Conjunto</title>
+        <style>
+            *{
+                font-family: Arial;
+            }
+            h1{
+                color: blue;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <center>
+            <h1>Inicio de Sesión</h1>
+            <h:form>
+                <h:outputLabel for="cedula" value="Cedula " />
+                <h:inputText id="cedula" value="#{loginBean.usuario.cedula}"
+                             required="true" requiredMessage=" Debe especificar un Documento" />
+                <h:message for="cedula" style="color: red;" />
+                
+                <br/><br/>
+                
+                <h:outputLabel for="clave" value="Clave " />
+                <h:inputSecret id="clave" value="#{loginBean.usuario.clave}"
+                             required="true" requiredMessage=" Debe especificar una Clave" />
+                <h:message for="clave" style="color: red;" />
+                
+                <br/><br/>
+                
+                <h:commandButton value="Aceptar" actionListener="#{loginBean.autenticar()}" />
+            </h:form>
+            
+        </center>
+        
+    </h:body>
+</html>
