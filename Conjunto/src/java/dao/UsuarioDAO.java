@@ -44,6 +44,7 @@ public class UsuarioDAO {
                 listUsr.add(u);
             }
         } catch (SQLException e) {
+            System.out.println(e);
         }
         
         return listUsr;

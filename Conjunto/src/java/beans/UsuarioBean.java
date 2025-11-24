@@ -30,9 +30,9 @@ public class UsuarioBean {
         this.listaU = listaU;
     }
     
-    public List<Usuario> listar(){
+    public void listar(){
         usuario = new Usuario();
-        return listaU = uDAO.listarU();
+        listaU = uDAO.listarU();
     }
     
     public void guardar(){
