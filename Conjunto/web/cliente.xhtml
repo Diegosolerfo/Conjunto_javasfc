@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Administrador</title>
+        <style>
+            *{
+                font-family: Arial;
+            }
+            h1{
+                color: green;
+                text-align: center;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <f:event type="preRenderView" listener="#{loginBean.verif_sesion('C')}" />
+        <h1>Bienvenido Cliente</h1>
+        <center>
+            <h:form>
+                <h:commandButton value="Cerrar Sesión" actionListener="#{loginBean.cerrar_sesion()}" />
+            </h:form>
+        </center>
+    </h:body>
+</html>

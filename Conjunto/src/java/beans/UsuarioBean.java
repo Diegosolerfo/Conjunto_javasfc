@@ -3,12 +3,12 @@ package beans;
 import dao.UsuarioDAO;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import modelo.Usuario;
 
 @ManagedBean
-@ApplicationScoped
+@RequestScoped
 public class UsuarioBean {
     Usuario usuario = new Usuario();
     List<Usuario> listaU = new ArrayList<>();
@@ -30,9 +30,9 @@ public class UsuarioBean {
         this.listaU = listaU;
     }
     
-    public void listar(){
+    public List<Usuario> listar(){
         usuario = new Usuario();
-        listaU = uDAO.listarU();
+        return listaU = uDAO.listarU();
     }
     
     public void guardar(){
@@ -40,22 +40,20 @@ public class UsuarioBean {
         uDAO.guardar(usuario);
     }
     
-    public void buscar(int id){
-        usuario = uDAO.buscar(id);
+    public void buscar(int Cedula){
+        usuario = uDAO.buscar(Cedula);
     }
-    /*
+    
     public void actualizar(){
         if(usuario.getClave().equals("")){
-            usuario.setClav
-    e(usuario.getClave());
+            usuario.setClave(usuario.getClave());
         }else{
             usuario.setClave(Utils.encriptar(usuario.getClave()));
         }        
         uDAO.actualizar(usuario);
     }
     
-    public void eliminar(int id){
-        uDAO.eliminar(id);
+    public void eliminar(int Cedula){
+        uDAO.eliminar(Cedula);
     }
-*/
 }

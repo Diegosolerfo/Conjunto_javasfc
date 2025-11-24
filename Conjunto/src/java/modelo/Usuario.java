@@ -2,7 +2,7 @@ package modelo;
 
 public class Usuario {
     private int cedula, telefono;
-    private String nombre, apellido, clave, correo, genero, fecha_nacimiento, tipo, estado;
+    private String nombre, apellido, clave, correo, genero, fecha_nacimiento, tipo_usuario, estado;
 
     public int getCedula() {
         return cedula;
@@ -68,12 +68,12 @@ public class Usuario {
         this.fecha_nacimiento = fecha_nacimiento;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getTipo_usuario() {
+        return tipo_usuario;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setTipo_usuario(String tipo_usuario) {
+        this.tipo_usuario = tipo_usuario;
     }
 
     public String getEstado() {
