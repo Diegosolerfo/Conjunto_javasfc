@@ -18,16 +18,16 @@
             <h1>Inicio de Sesión</h1>
             
             <h:form>
-                <h:outputLabel for="doc" value="Documento " />
+                <h:outputLabel for="doc" value="Cedula " />
                 <h:inputText id="doc" value="#{loginBean.usuario.cedula}"
-                             required="true" requiredMessage=" Debe especificar un Documento" />
+                             required="true" requiredMessage=" Debe especificar un Cedula" />
                 <h:message for="doc" style="color: red;" />
                 
                 <br/><br/>
                 
-                <h:outputLabel for="pas" value="Contraseña " />
+                <h:outputLabel for="pas" value="Clave " />
                 <h:inputSecret id="pas" value="#{loginBean.usuario.clave}"
-                             required="true" requiredMessage=" Debe especificar una Contraseña" />
+                             required="true" requiredMessage=" Debe especificar una Clave" />
                 <h:message for="pas" style="color: red;" />
                 
                 <br/><br/>

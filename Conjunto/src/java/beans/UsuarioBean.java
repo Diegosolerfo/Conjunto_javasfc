@@ -40,20 +40,21 @@ public class UsuarioBean {
         uDAO.guardar(usuario);
     }
     
-    public void buscar(int Cedula){
+    public void buscar(long Cedula){
         usuario = uDAO.buscar(Cedula);
     }
     
     public void actualizar(){
-        if(usuario.getClave().equals("")){
-            usuario.setClave(usuario.getClave());
-        }else{
-            usuario.setClave(Utils.encriptar(usuario.getClave()));
-        }        
+        // if a new password was entered, encrypt it and set as the stored clave
+        if(usuario.getClaveNueva() != null && !usuario.getClaveNueva().trim().isEmpty()){
+            usuario.setClave(Utils.encriptar(usuario.getClaveNueva()));
+        }
+        // if claveNueva is empty/null, we keep usuario.clave as loaded from DB (hashed)
+        
         uDAO.actualizar(usuario);
     }
     
-    public void eliminar(int Cedula){
+    public void eliminar(long Cedula){
         uDAO.eliminar(Cedula);
     }
 }

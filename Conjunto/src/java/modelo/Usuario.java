@@ -1,22 +1,24 @@
 package modelo;
 
 public class Usuario {
-    private int cedula, telefono;
+    private long cedula, telefono;
     private String nombre, apellido, clave, correo, genero, fecha_nacimiento, tipo_usuario, estado;
+    // used on edit forms to input a new password without immediately overwriting the stored hash
+    private String claveNueva;
 
-    public int getCedula() {
+    public long getCedula() {
         return cedula;
     }
 
-    public void setCedula(int cedula) {
+    public void setCedula(long cedula) {
         this.cedula = cedula;
     }
 
-    public int getTelefono() {
+    public long getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(long telefono) {
         this.telefono = telefono;
     }
 
@@ -82,6 +84,14 @@ public class Usuario {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getClaveNueva() {
+        return claveNueva;
+    }
+
+    public void setClaveNueva(String claveNueva) {
+        this.claveNueva = claveNueva;
     }
 
     

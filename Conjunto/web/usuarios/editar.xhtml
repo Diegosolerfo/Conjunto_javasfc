@@ -12,11 +12,11 @@
         <br/>
         <center>
             <h:form>
-                <h:inputHidden value="#{usuarioBean.usuario.id}" />
-                <h:inputHidden value="#{usuarioBean.usuario.pass1}" />
+                <h:inputHidden value="#{usuarioBean.usuario.cedula}" />
+                <h:inputHidden value="#{usuarioBean.usuario.clave}" />
                 <h:panelGrid columns="3">
                     <h:outputLabel value="Documento: " for="doc" />
-                    <h:inputText id="doc" value="#{usuarioBean.usuario.doc}" class="form-control"
+                    <h:inputText id="doc" value="#{usuarioBean.usuario.cedula}" class="form-control"
                                  required="true" requiredMessage="Debe especificar un Documento" />
                     <h:message for="doc" class="text-danger" />
                     
@@ -30,15 +30,44 @@
                     <h:inputText id="cor" value="#{usuarioBean.usuario.correo}" class="form-control"  />
                     <h:message for="cor" class="text-danger" />
                     
-                    <h:outputLabel for="pas" value="Contraseña: " />
-                    <h:inputSecret id="pas" value="#{usuarioBean.usuario.pass}"  class="form-control" />
+                    <h:outputLabel for="pas" value="Nueva Contraseña (opcional): " />
+                    <h:inputSecret id="pas" value="#{usuarioBean.usuario.claveNueva}"  class="form-control" />
                     <h:message for="pas" class="text-danger" />
                     
+                    <h:outputLabel for="ape" value="Apellido: " />
+                    <h:inputText id="ape" value="#{usuarioBean.usuario.apellido}" class="form-control" required="true" requiredMessage="Debe especificar un Apellido" />
+                    <h:message for="ape" class="text-danger" />
+
+                    <h:outputLabel for="tel" value="Telefono: " />
+                    <h:inputText id="tel" value="#{usuarioBean.usuario.telefono}" class="form-control" />
+                    <h:message for="tel" class="text-danger" />
+
+                    <h:outputLabel for="gen" value="Género: " />
+                    <h:selectOneMenu id="gen" value="#{usuarioBean.usuario.genero}" class="form-select">
+                        <f:selectItem itemValue="MASCULINO" itemLabel="Masculino" />
+                        <f:selectItem itemValue="FEMENINO" itemLabel="Femenino" />
+                        <f:selectItem itemValue="OTRO" itemLabel="Otro" />
+                    </h:selectOneMenu>
+                    <h:message for="gen" class="text-danger" />
+
+                    <h:outputLabel for="fn" value="Fecha Nacimiento: " />
+                    <h:inputText id="fn" value="#{usuarioBean.usuario.fecha_nacimiento}" class="form-control" />
+                    <h:message for="fn" class="text-danger" />
+
                     <h:outputLabel for="tipo" value="Tipo de Usuario: " />
-                    <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo}"  class="form-select">
-                        <f:selectItem itemValue="A" itemLabel="Administrador" />
-                        <f:selectItem itemValue="C" itemLabel="Cliente" />
-                        <f:selectItem itemValue="V" itemLabel="Vendedor" />
+                    <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo_usuario}"  class="form-select">
+                        <f:selectItem itemValue="ADMINISTRADOR" itemLabel="Administrador" />
+                        <f:selectItem itemValue="CAJERO" itemLabel="Cajero" />
+                        <f:selectItem itemValue="CLIENTE" itemLabel="Cliente" />
+                    </h:selectOneMenu>
+                    <h:message for="tipo" class="text-danger" />
+
+                    <h:outputLabel for="est" value="Estado: " />
+                    <h:selectOneMenu id="est" value="#{usuarioBean.usuario.estado}" class="form-select">
+                        <f:selectItem itemValue="ACTIVO" itemLabel="Activo" />
+                        <f:selectItem itemValue="INACTIVO" itemLabel="Inactivo" />
+                    </h:selectOneMenu>
+                    <h:message for="est" class="text-danger" />
                     </h:selectOneMenu>
                     <h:message for="tipo" class="text-danger" />
                     

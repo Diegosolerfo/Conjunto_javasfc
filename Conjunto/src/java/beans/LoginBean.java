@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import modelo.Usuario;
+import beans.Utils;
 
 @ManagedBean
 public class LoginBean {
@@ -37,11 +38,10 @@ public class LoginBean {
                         
             String sql = "SELECT * FROM usuario WHERE cedula = ? AND clave = ?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, usuario.getCedula());
-            ps.setString(2, usuario.getClave());
+            ps.setLong(1, usuario.getCedula());
+            ps.setString(2, (usuario.getClave()));
             
             ResultSet rs = ps.executeQuery();
-                       
             if(rs.next()){
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", rs.getString("nombre"));
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("tipo_usuario", rs.getString("tipo_usuario"));
@@ -66,6 +66,7 @@ public class LoginBean {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("error.xhtml");
             }            
         } catch (SQLException | IOException e) {
+            System.out.println("Login error: " + e.getMessage());
         }        
     }
     

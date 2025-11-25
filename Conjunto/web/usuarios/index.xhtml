@@ -12,7 +12,7 @@
         <h2 class="text-center text-primary">Administrar Usuarios</h2>
         <h:form>
             <div class="container">
-                <h:commandLink value="Nuevo Usuario" class="text-primary" action="nuevo" />
+                <h:commandLink value="Nuevo Usuario" class="text-primary" action="nuevo.xhtml" />
                 <h:commandLink value="Menú Anterior" class="text-secondary" action="/faces/admin/index"
                                style="margin-left: 15px;" />
                 <br/><br/>
@@ -54,11 +54,38 @@
 
                     <h:column headerClass="text-center">
                         <f:facet name="header">
+                            <h:outputLabel value="Género" />
+                        </f:facet>
+                        <h:outputText value="#{usr.genero}" />
+                    </h:column>
+
+                    <h:column headerClass="text-center">
+                        <f:facet name="header">
+                            <h:outputLabel value="Fecha Nac." />
+                        </f:facet>
+                        <h:outputText value="#{usr.fecha_nacimiento}" />
+                    </h:column>
+
+                    <h:column headerClass="text-center">
+                        <f:facet name="header">
+                            <h:outputLabel value="Tipo" />
+                        </f:facet>
+                        <h:outputText value="#{usr.tipo_usuario}" />
+                    </h:column>
+
+                    <h:column headerClass="text-center">
+                        <f:facet name="header">
+                            <h:outputLabel value="Estado" />
+                        </f:facet>
+                        <h:outputText value="#{usr.estado}" />
+                    </h:column>
+
+                    <h:column headerClass="text-center">
+                        <f:facet name="header">
                             <h:outputLabel value="Opciones" />                        
                         </f:facet>
                         <div align="center">
-                            <h:commandLink value="Editar" class="text-success" 
-                                           actionListener="#{usuarioBean.buscar(usr.cedula)}" action="editar" />
+                            <h:commandLink value="Editar" class="text-success" action="/editar.xhtml" actionListener="#{usuarioBean.buscar(usr.cedula)}"/>
                             <h:commandLink value="Eliminar" class="text-danger" style="margin-left: 15px;"
                                            actionListener="#{usuarioBean.eliminar(usr.cedula)}"
                                            onclick="return confirm('Está completamente seguro de ELIMINAR el Usuario #{usr.nombre} ??!!!');" />                        

@@ -5,6 +5,11 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Nuevo Usuario</title>
+        <style>
+            input{
+                width: 60vh;
+            }
+        </style>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
     </h:head>
     <h:body>
@@ -12,33 +17,60 @@
         <br/>
         <center>
             <h:form>
-                <h:panelGrid columns="3">
+                
                     <h:outputLabel value="Documento: " for="doc" />
-                    <h:inputText id="doc" value="#{usuarioBean.usuario.doc}" class="form-control"
+                    <h:inputText id="doc" value="#{usuarioBean.usuario.cedula}" class="form-control"
                                  required="true" requiredMessage="Debe especificar un Documento" />
                     <h:message for="doc" class="text-danger" />
                     
                     
                     <h:outputLabel for="nom" value="Nombre del Usuario: " />
-                    <h:inputText id="nom" value="#{usuarioBean.usuario.nombre}" class="form-control"
-                                 required="true" requiredMessage="Debe especificar un Nombre" />
+                    <h:inputText id="nom" value="#{usuarioBean.usuario.nombre}" class="form-control" required="true" requiredMessage="Debe especificar un Nombre" />
                     <h:message for="nom" class="text-danger" />
                     
+                    <h:outputLabel for="ape" value="Apellido: " />
+                    <h:inputText id="ape" value="#{usuarioBean.usuario.apellido}" class="form-control" required="true" requiredMessage="Debe especificar un Apellido" />
+                    <h:message for="ape" class="text-danger" />
                     <h:outputLabel for="cor" value="Correo: " />
                     <h:inputText id="cor" value="#{usuarioBean.usuario.correo}" class="form-control"  />
                     <h:message for="cor" class="text-danger" />
                     
                     <h:outputLabel for="pas" value="Contraseña: " />
-                    <h:inputSecret id="pas" value="#{usuarioBean.usuario.pass}"  class="form-control"                                
+                    <h:inputSecret id="pas" value="#{usuarioBean.usuario.clave}"  class="form-control"                                
                                  required="true" requiredMessage="Debe especificar una Contraseña" />
                     <h:message for="pas" class="text-danger" />
                     
-                    <h:outputLabel for="tipo" value="Tipo de Usuario: " />
-                    <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo}"  class="form-select">
-                        <f:selectItem itemValue="A" itemLabel="Administrador" />
-                        <f:selectItem itemValue="C" itemLabel="Cliente" />
-                        <f:selectItem itemValue="V" itemLabel="Vendedor" />
+                    <h:outputLabel for="tel" value="Telefono: " />
+                    <h:inputText id="tel" value="#{usuarioBean.usuario.telefono}" class="form-control" />
+                    <h:message for="tel" class="text-danger" />
+
+                    <h:outputLabel for="gen" value="Género: " />
+                    <h:selectOneMenu id="gen" value="#{usuarioBean.usuario.genero}" class="form-select">
+                        <f:selectItem itemValue="MASCULINO" itemLabel="Masculino" />
+                        <f:selectItem itemValue="FEMENINO" itemLabel="Femenino" />
+                        <f:selectItem itemValue="OTRO" itemLabel="Otro" />
                     </h:selectOneMenu>
+                    <h:message for="gen" class="text-danger" />
+
+                    <h:outputLabel for="fn" value="Fecha Nacimiento: " />
+                    <h:inputText id="fn" value="#{usuarioBean.usuario.fecha_nacimiento}" class="form-control" />
+                    <h:message for="fn" class="text-danger" />
+
+                    <h:outputLabel for="tipo" value="Tipo de Usuario: " />
+                    <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo_usuario}"  class="form-select">
+                        <f:selectItem itemValue="ADMINISTRADOR" itemLabel="Administrador" />
+                        <f:selectItem itemValue="CAJERO" itemLabel="Cajero" />
+                        <f:selectItem itemValue="CLIENTE" itemLabel="Cliente" />
+                    </h:selectOneMenu>
+                    <h:message for="tipo" class="text-danger" />
+
+                    <h:outputLabel for="est" value="Estado: " />
+                    <h:selectOneMenu id="est" value="#{usuarioBean.usuario.estado}" class="form-select">
+                        <f:selectItem itemValue="ACTIVO" itemLabel="Activo" />
+                        <f:selectItem itemValue="INACTIVO" itemLabel="Inactivo" />
+                    </h:selectOneMenu>
+                    <h:message for="est" class="text-danger" />
+                    
                     <h:message for="tipo" class="text-danger" />
                     
                     <h:column /><h:column><br/></h:column><h:column />
@@ -51,7 +83,7 @@
                                          style="margin-left: 15px;" immediate="true" />
                     </h:column>
                     
-                </h:panelGrid>
+                
             </h:form>
         </center>
     </h:body>
