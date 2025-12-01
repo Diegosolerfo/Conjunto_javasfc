@@ -4,11 +4,11 @@ import dao.UsuarioDAO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import modelo.Usuario;
 
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class UsuarioBean {
     Usuario usuario = new Usuario();
     List<Usuario> listaU = new ArrayList<>();
@@ -40,18 +40,15 @@ public class UsuarioBean {
         uDAO.guardar(usuario);
     }
     
-    public void buscar(long Cedula){
+    public String buscar(long Cedula){
         usuario = uDAO.buscar(Cedula);
+        usuario.setClaveNueva(null);
+        return "editar?faces-redirect=true";
     }
     
-    public void actualizar(){
-        // if a new password was entered, encrypt it and set as the stored clave
-        if(usuario.getClaveNueva() != null && !usuario.getClaveNueva().trim().isEmpty()){
-            usuario.setClave(Utils.encriptar(usuario.getClaveNueva()));
-        }
-        // if claveNueva is empty/null, we keep usuario.clave as loaded from DB (hashed)
-        
+    public String actualizar(){
         uDAO.actualizar(usuario);
+        return "index?faces-redirect=true";
     }
     
     public void eliminar(long Cedula){

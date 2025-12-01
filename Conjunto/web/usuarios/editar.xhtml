@@ -31,7 +31,7 @@
                     <h:message for="cor" class="text-danger" />
                     
                     <h:outputLabel for="pas" value="Nueva Contraseña (opcional): " />
-                    <h:inputSecret id="pas" value="#{usuarioBean.usuario.claveNueva}"  class="form-control" />
+                    <h:inputSecret id="pas" value="#{usuarioBean.usuario.clave}"  class="form-control" />
                     <h:message for="pas" class="text-danger" />
                     
                     <h:outputLabel for="ape" value="Apellido: " />
@@ -68,7 +68,6 @@
                         <f:selectItem itemValue="INACTIVO" itemLabel="Inactivo" />
                     </h:selectOneMenu>
                     <h:message for="est" class="text-danger" />
-                    </h:selectOneMenu>
                     <h:message for="tipo" class="text-danger" />
                     
                     <h:column /><h:column><br/></h:column><h:column />

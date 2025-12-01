@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import modelo.Usuario;
 
 public class UsuarioDAO {
@@ -84,16 +86,15 @@ public class UsuarioDAO {
             if(rs.next()){
                 usr = new Usuario();
                 
-                usr.setCedula(rs.getLong("cedula"));
-                usr.setNombre(rs.getString("nombre"));
-                usr.setApellido(rs.getString("apellido"));
-                usr.setCorreo(rs.getString("correo"));
+                usr.setCedula(rs.getLong("CEDULA"));
+                usr.setNombre(rs.getString("NOMBRE"));
+                usr.setApellido(rs.getString("APELLIDO"));
+                usr.setCorreo(rs.getString("CORREO"));
                 usr.setTelefono(rs.getLong("telefono"));
                 usr.setGenero(rs.getString("genero"));
                 usr.setFecha_nacimiento(rs.getString("fecha_nacimiento"));
                 usr.setTipo_usuario(rs.getString("tipo_usuario"));
                 usr.setEstado(rs.getString("estado"));
-                // load the stored hashed password so the bean can preserve it on updates
                 usr.setClave(rs.getString("clave"));
             }                        
         } catch (SQLException e) {
@@ -105,7 +106,7 @@ public class UsuarioDAO {
     public void actualizar(Usuario usr){
         try {
                 String sql = "UPDATE usuario SET NOMBRE = ?, APELLIDO = ?, CLAVE = ?, CORREO = ?, TELEFONO = ?,"
-                    + " GENERO = ?, FECHA_NACIMIENTO = ?, TIPO_USUARIO = ?, ESTADO = ? WHERE cedula = ?";
+                    + " GENERO = ?, FECHA_NACIMIENTO = ?, TIPO_USUARIO = ?, ESTADO = ? WHERE CEDULA = ?;";
             ps = con.prepareStatement(sql);
             ps.setString(1, usr.getNombre());
             ps.setString(2, usr.getApellido());
@@ -120,6 +121,10 @@ public class UsuarioDAO {
                         
             ps.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
+            String mensaje = e.getMessage();
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se actualizo", mensaje));
         }        
     }
     

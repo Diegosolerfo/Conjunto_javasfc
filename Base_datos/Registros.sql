@@ -52,7 +52,7 @@ INSERT INTO PRODUCTO(NOMBRE_PRODUCTO, DESCRIPCION_PRODUCTO, VALOR_UNITARIO, UNID
 ('Azúcar Manuelita', 'Azúcar blanca refinada', 2800, '500g', 'ACTIVO'),
 ('Café Águila Roja', 'Café molido tradicional', 4500, '250g', 'ACTIVO');
 
-INSERT INTO PROVEEDOR(NOMBRE_PROVEEDOR,NUMERO_TELEFONICO,CORREO_PROVEEDOR,DIRECCION,ESTADO) VALUES
+INSERT INTO PROVEEDOR(NOMBRE_PROVEEDOR,TELEFONO,CORREO,DIRECCION,ESTADO) VALUES
 ('Productos Ramo S.A.','6012345678','contacto@ramo.com.co','Av. Calle 68 # 24-15, Bogotá, Cundinamarca','ACTIVO'),
 ('Diana Corporación S.A.S.','6023456789','info@dianacorp.com','Calle 26 # 82-48, Bogotá, Cundinamarca','ACTIVO'),
 ('Colanta Cooperativa','6045678901','servicio@colanta.com','Cl. 10 # 22-30, Medellín, Antioquia','ACTIVO'),

@@ -3,7 +3,6 @@ package modelo;
 public class Usuario {
     private long cedula, telefono;
     private String nombre, apellido, clave, correo, genero, fecha_nacimiento, tipo_usuario, estado;
-    // used on edit forms to input a new password without immediately overwriting the stored hash
     private String claveNueva;
 
     public long getCedula() {
