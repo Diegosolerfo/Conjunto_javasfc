@@ -13,6 +13,9 @@
                 color: blue;
                 text-align: center;
             }
+            .menu{
+                margin-right: 5px; 
+            }
         </style>
     </h:head>
     <h:body>
@@ -21,8 +24,9 @@
         <h2>#{loginBean.nombreUsuario}</h2>
         <center>
             <h:form>
-                <h:commandButton value="Administrar Usuarios" action="/faces/usuarios/index"  />
-                <h:commandButton value="Administrar Proveedores" action="/faces/proveedores/index"  />
+                <h:commandButton value="Administrar Usuarios" action="/faces/usuarios/index" class="menu" />
+                <h:commandButton value="Administrar Proveedores" action="/faces/proveedores/index" class="menu"  />
+                <h:commandButton value="Administrar Movimientos" action="/faces/movimientos/index" class="menu"  />
                 <br/><br/>
                 <h:commandButton value="Cerrar Sesión" actionListener="#{loginBean.cerrar_sesion()}" />
             </h:form>
