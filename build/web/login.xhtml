@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Mi Tienda - Acceso al Sistema</title>
+        <style>
+            /* 🎨 Diseño Base y Paleta de Colores Corporativos */
+            :root {
+                --primary-color: #007bff; /* Azul corporativo para acentos (botón) */
+                --secondary-color: #6c757d; /* Gris para texto secundario */
+                --background-color: #e9ecef; /* Gris claro muy sutil para el fondo */
+                --card-background: #ffffff; /* Blanco para el contenedor principal */
+                --error-color: #dc3545; /* Rojo para mensajes de error */
+                --border-color: #ced4da; /* Gris para bordes de input */
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background-color: var(--background-color);
+            }
+
+            /* 💳 Contenedor del Formulario (Tarjeta de Login) */
+            .login-card {
+                width: 100%;
+                max-width: 400px;
+                padding: 40px;
+                background-color: var(--card-background);
+                border-radius: 12px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Sombra elegante */
+                text-align: center;
+            }
+
+            /* 🖋️ Encabezados */
+            h1 {
+                color: #343a40; /* Gris oscuro, profesional */
+                font-size: 2em;
+                margin-bottom: 30px;
+                font-weight: 300; /* Fuente ligera para un look moderno */
+                border-bottom: 2px solid var(--primary-color);
+                padding-bottom: 10px;
+                display: inline-block;
+            }
+            
+            /* 🏷️ Estilo para cada grupo de input */
+            .form-group {
+                text-align: left;
+                margin-bottom: 20px;
+            }
+
+            /* 📝 Etiquetas */
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 600; /* Semi-negrita para las etiquetas */
+                color: #495057;
+                font-size: 0.95em;
+            }
+
+            /* 🖥️ Campos de Input */
+            .form-group .ui-inputfield {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid var(--border-color);
+                border-radius: 6px;
+                box-sizing: border-box; /* Incluye padding y borde en el ancho total */
+                font-size: 1em;
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+
+            .form-group .ui-inputfield:focus {
+                border-color: var(--primary-color);
+                outline: none;
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Resplandor suave al enfocar */
+            }
+
+            /* 🛑 Mensajes de Error */
+            .form-group .error-message {
+                color: var(--error-color) !important;
+                font-size: 0.85em;
+                margin-top: 5px;
+                display: block;
+            }
+
+            /* ▶️ Botón de Aceptar */
+            .login-button {
+                width: 100%;
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+                padding: 15px;
+                font-size: 1.1em;
+                font-weight: bold;
+                border-radius: 6px;
+                cursor: pointer;
+                margin-top: 15px;
+                transition: background-color 0.3s ease, transform 0.1s ease;
+            }
+
+            .login-button:hover {
+                background-color: #0056b3; /* Azul más oscuro al pasar el ratón */
+            }
+            
+            .login-button:active {
+                transform: translateY(1px); /* Efecto de "presionar" */
+            }
+            
+        </style>
+    </h:head>
+    <h:body>
+        
+        <div class="login-card">
+            <h1>Acceso al Sistema</h1>
+            
+            <h:form>
+                
+                <div class="form-group">
+                    <h:outputLabel for="doc" value="Cédula/Usuario" />
+                    <h:inputText id="doc" value="#{loginBean.usuario.cedula}"
+                                 required="true" requiredMessage="Debe especificar una Cédula o Usuario."
+                                 styleClass="ui-inputfield" />
+                    <h:message for="doc" styleClass="error-message" />
+                </div>
+                
+                <div class="form-group">
+                    <h:outputLabel for="pas" value="Contraseña" />
+                    <h:inputSecret id="pas" value="#{loginBean.usuario.clave}"
+                                   required="true" requiredMessage="Debe especificar una Contraseña."
+                                   styleClass="ui-inputfield" />
+                    <h:message for="pas" styleClass="error-message" />
+                </div>
+                
+                <h:commandButton value="Iniciar Sesión" 
+                                 actionListener="#{loginBean.autenticar()}" 
+                                 styleClass="login-button" />
+                                 
+            </h:form>
+        </div>
+        
+    </h:body>
+</html>

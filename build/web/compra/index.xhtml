@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Administrar Compras</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+              rel="stylesheet"/>
+    </h:head>
+
+    <h:body>
+        <!-- Cargar lista al abrir -->
+        <f:event type="preRenderView" listener="#{compraBean.listar()}" />
+
+        <h2 class="text-center text-primary">Administrar Compras</h2>
+
+        <h:form>
+            <div class="container">
+
+                <!-- Botones superiores -->
+                <h:commandLink value="Nueva Compra" class="text-primary" action="nuevo.xhtml" />
+                <h:commandLink value="Menú Anterior" class="text-secondary"
+                               style="margin-left: 15px;" action="/faces/admin/index" />
+                <br/><br/>
+
+                <!-- Tabla de compras -->
+                <h:dataTable value="#{compraBean.listaCompras}" var="c"
+                             class="table table-bordered table-striped">
+
+                    <!-- ID COMPRA -->
+                    <h:column headerClass="text-center">
+                        <f:facet name="header">
+                            <h:outputText value="ID Compra"/>
+                        </f:facet>
+                        <h:outputText value="#{c.idCompra}"/>
+                    </h:column>
+
+                    <!-- FECHA -->
+                    <h:column headerClass="text-center">
+                        <f:facet name="header">
+                            <h:outputText value="Fecha Llegada"/>
+                        </f:facet>
+                        <h:outputText value="#{c.fechaLlegada}"/>
+                    </h:column>
+
+                    <!-- PROVEEDOR -->
+                    <h:column headerClass="text-center">
+                        <f:facet name="header">
+                            <h:outputText value="Proveedor"/>
+                        </f:facet>
+                        <h:outputText value="#{c.proveedorC}"/>
+                    </h:column>
+
+                    <!-- MOVIMIENTO -->
+                    <h:column headerClass="text-center">
+                        <f:facet name="header">
+                            <h:outputText value="Movimiento"/>
+                        </f:facet>
+                        <h:outputText value="#{c.movimiento}"/>
+                    </h:column>
+
+                    <!-- PRODUCTO -->
+                    <h:column headerClass="text-center">
+                        <f:facet name="header">
+                            <h:outputText value="Producto"/>
+                        </f:facet>
+                        <h:outputText value="#{c.productoComprado}"/>
+                    </h:column>
+
+                    <!-- OPCIONES -->
+                    <h:column headerClass="text-center">
+                        <f:facet name="header">
+                            <h:outputText value="Opciones"/>
+                        </f:facet>
+                        <div align="center">
+                            <h:commandLink value="Editar" class="text-success"
+                                           actionListener="#{compraBean.buscar(c.idCompra)}"
+                                           action="editar.xhtml"/>
+
+                            <h:commandLink value="Eliminar" class="text-danger"
+                                           style="margin-left: 15px;"
+                                           actionListener="#{compraBean.eliminar(c.idCompra)}"
+                                           onclick="return confirm('¿Seguro que desea eliminar la compra #{c.idCompra}?');"/>
+                        </div>
+                    </h:column>
+
+                </h:dataTable>
+            </div>
+        </h:form>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    </h:body>
+
+</html>

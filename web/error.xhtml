@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Error de Acceso</title>
+        <style>
+            /* Paleta de colores para el error */
+            :root {
+                --error-background: #ffe6e6; /* Fondo rojo muy suave */
+                --error-text: #8d0000; /* Rojo oscuro para el mensaje */
+                --border-color: #ff3333; /* Rojo brillante para el borde */
+                --button-color: #6c757d; /* Gris secundario para el botón de regreso */
+                --button-hover: #5a6268;
+                --background-color: #f8f9fa; /* Fondo general claro */
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background-color: var(--background-color);
+            }
+
+            /* ⚠️ Contenedor del Mensaje de Error */
+            .error-box {
+                width: 100%;
+                max-width: 450px;
+                padding: 30px;
+                background-color: var(--error-background);
+                border: 2px solid var(--border-color);
+                border-radius: 12px;
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+
+            /* ❌ Mensaje de Título */
+            h1 {
+                color: var(--error-text);
+                font-size: 2.5em;
+                margin-bottom: 5px;
+            }
+
+            /* 💬 Mensaje de Error Específico */
+            h3 {
+                color: var(--error-text);
+                font-size: 1.2em;
+                margin-top: 5px;
+                margin-bottom: 30px;
+                font-weight: 400; /* No tan negrita para un look más suave */
+            }
+            
+            /* ↩️ Botón de Regreso */
+            .back-button {
+                background-color: var(--button-color);
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                font-size: 1em;
+                font-weight: 600;
+                border-radius: 6px;
+                cursor: pointer;
+                text-decoration: none; /* Si se usa un h:outputLink o similar */
+                transition: background-color 0.3s ease, transform 0.1s ease;
+            }
+
+            .back-button:hover {
+                background-color: var(--button-hover);
+                transform: translateY(-1px);
+            }
+        </style>
+    </h:head>
+    <h:body>
+        
+        <div class="error-box">
+            
+            <h1>❌ Acceso Denegado</h1>
+            
+            <h3>Documento y/o Contraseña no válidos. Por favor, inténtelo de nuevo.</h3>
+      
+        </div>
+        
+    </h:body>
+</html>

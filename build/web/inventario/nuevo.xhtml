@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Registrar Item de Inventario</title>
+</h:head>
+<h:body>
+    <div class="container">
+        <h:form>
+            <h:commandLink action="index?faces-redirect=true" value="Lista de Inventario" immediate="true" />
+            <h2 class="title">Registrar Item de Inventario</h2>
+
+            <h:panelGrid columns="2" cellpadding="5">
+                
+                <h:outputLabel value="Producto:" for="productoId" />
+                <h:selectOneMenu id="productoId" value="#{inventarioBean.inventario.id_item}" required="true" 
+                                 converter="omnifaces.SelectItemsConverter">
+                    <f:selectItem itemLabel="-- Seleccionar Producto --" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{inventarioBean.listaProductosDisponibles}" var="p" itemLabel="#{p.nombre}" itemValue="#{p}"/>
+                </h:selectOneMenu>
+
+                <h:outputLabel value="Ubicación:" for="ubicacion" />
+                <h:inputText id="ubicacion" value="#{inventarioBean.inventario.ubicacion}" required="true" />
+
+                <h:outputLabel value="Cantidad:" for="cantidad" />
+                <h:inputText id="cantidad" value="#{inventarioBean.inventario.cantidad}" required="true">
+                    <f:convertNumber integerOnly="true" />
+                </h:inputText>
+
+                <h:outputLabel value="Especificaciones:" for="specs" />
+                <h:inputText id="specs" value="#{inventarioBean.inventario.especificaciones}" required="true" />
+
+                <h:outputLabel value="Fecha de Vencimiento:" for="vencimiento" />
+                <h:inputText id="vencimiento" value="#{inventarioBean.inventario.fecha_vencimiento}" required="true">
+                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                </h:inputText>
+                
+                <h:outputLabel value="Estado:" for="estado" />
+                <h:selectOneMenu id="estado" value="#{inventarioBean.inventario.estado}" required="true">
+                    <f:selectItem itemLabel="DISPONIBLE" itemValue="DISPONIBLE" />
+                    <f:selectItem itemLabel="NO DISPONIBLE" itemValue="NO DISPONIBLE" />
+                </h:selectOneMenu>
+                
+            </h:panelGrid>
+
+            <h:commandButton action="#{inventarioBean.guardar()}" value="Guardar Item" styleClass="btn-primary" style="margin-top: 20px;"/>
+
+        </h:form>
+    </div>
+</h:body>
+</html>
