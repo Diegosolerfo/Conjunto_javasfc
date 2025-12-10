@@ -14,12 +14,8 @@ public class ProveedorDAO {
     private PreparedStatement ps;
     private ResultSet rs;
 
-    // ----------------------------------------------------------
-    // LISTAR PROVEEDORES
-    // ----------------------------------------------------------
     public List<Proveedor> listarP() {
         List<Proveedor> lista = new ArrayList<>();
-        // CLAVE: La consulta SQL debe reflejar los nombres correctos (NOMBRE_PROVEEDOR)
         String sql = "SELECT ID_PROVEEDOR, NOMBRE_PROVEEDOR, TELEFONO, CORREO, DIRECCION, ESTADO FROM PROVEEDOR";
 
         try {
@@ -33,9 +29,7 @@ public class ProveedorDAO {
 
             while (rs.next()) {
                 Proveedor p = new Proveedor();
-                // CORRECCIÓN CLAVE: Usar los nombres EXACTOS de las columnas SQL (MAYÚSCULAS)
                 p.setId_proveedor(rs.getInt("ID_PROVEEDOR"));
-                // ¡AQUÍ ESTABA EL ERROR! Usar NOMBRE_PROVEEDOR
                 p.setNombre(rs.getString("NOMBRE_PROVEEDOR"));
                 p.setTelefono(rs.getLong("TELEFONO"));
                 p.setCorreo(rs.getString("CORREO"));
@@ -60,11 +54,7 @@ public class ProveedorDAO {
         return lista;
     }
 
-    // ----------------------------------------------------------
-    // GUARDAR 
-    // ----------------------------------------------------------
     public void guardar(Proveedor prv) {
-        // CLAVE: Ajustar la consulta INSERT para usar NOMBRE_PROVEEDOR
         String sql = "INSERT INTO PROVEEDOR (NOMBRE_PROVEEDOR, TELEFONO, CORREO, DIRECCION, ESTADO) VALUES (?, ?, ?, ?, ?)";
 
         try {
@@ -89,13 +79,9 @@ public class ProveedorDAO {
         }
     }
     
-    // ----------------------------------------------------------
-    // BUSCAR
-    // ----------------------------------------------------------
     public Proveedor buscar(int id) {
         Proveedor p = new Proveedor();
-        // CLAVE: La consulta SELECT debe usar NOMBRE_PROVEEDOR
-        String sql = "SELECT ID_PROVEEDOR, NOMBRE_PROVEEDOR, TELEFONO, CORREO, DIRECCION, ESTADO FROM PROVEEDOR WHERE ID_PROVEEDOR = ?";
+        String sql = "SELECT * FROM proveedor WHERE ID_PROVEEDOR = ?";
 
         try {
             con = ConnBD.conectar();
@@ -104,33 +90,26 @@ public class ProveedorDAO {
             rs = ps.executeQuery();
 
             if (rs.next()) {
-                // CORRECCIÓN CLAVE: Usar los nombres EXACTOS de las columnas SQL (MAYÚSCULAS)
                 p.setId_proveedor(rs.getInt("ID_PROVEEDOR"));
-                p.setNombre(rs.getString("NOMBRE_PROVEEDOR")); // ¡AQUÍ ESTABA EL ERROR!
+                p.setNombre(rs.getString("NOMBRE_PROVEEDOR"));
                 p.setTelefono(rs.getLong("TELEFONO"));
                 p.setCorreo(rs.getString("CORREO"));
                 p.setDireccion(rs.getString("DIRECCION"));
                 p.setEstado(rs.getString("ESTADO"));
             }
         } catch (SQLException e) {
-            System.err.println("Error al buscar proveedor: " + e.getMessage());
-        } finally {
+        }   finally {
             try {
-                if (rs != null) rs.close();
                 if (ps != null) ps.close();
                 if (con != null) con.close();
             } catch (SQLException ex) {
-                System.err.println("Error al cerrar recursos en ProveedorDAO.buscar: " + ex.getMessage());
+                System.out.println("Error al cerrar recursos en ProductosDAO.actualizar: " + ex.getMessage());
             }
         }
         return p;
     }
     
-    // ----------------------------------------------------------
-    // ACTUALIZAR
-    // ----------------------------------------------------------
     public void actualizar(Proveedor prv) {
-        // CLAVE: La consulta UPDATE debe usar NOMBRE_PROVEEDOR
         String sql = "UPDATE PROVEEDOR SET NOMBRE_PROVEEDOR=?, TELEFONO=?, CORREO=?, DIRECCION=?, ESTADO=? WHERE ID_PROVEEDOR=?";
 
         try {
@@ -156,9 +135,6 @@ public class ProveedorDAO {
         }
     }
     
-    // ----------------------------------------------------------
-    // ELIMINAR
-    // ----------------------------------------------------------
     public void eliminar(int id) {
         String sql = "DELETE FROM PROVEEDOR WHERE ID_PROVEEDOR=?";
 

@@ -1,29 +1,20 @@
 package beans;
 
 import dao.ProveedorDAO;
-import java.io.Serializable; // Implementar Serializable es necesario para ViewScoped/SessionScoped
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct; 
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped; // Ámbito recomendado para páginas con tablas
 import modelo.Proveedor;
 
 @ManagedBean
-@ViewScoped // Cambio a ViewScoped para mejor rendimiento y actualización de la vista
+@ApplicationScoped  
 public class ProveedorBean implements Serializable {
     
     private Proveedor proveedor = new Proveedor();
     private List<Proveedor> listaP = new ArrayList<>();
     private ProveedorDAO pDAO = new ProveedorDAO();
-
-    /**
-     * Inicializa el bean y carga la lista de proveedores al cargar la vista.
-     */
-    @PostConstruct
-    public void init() {
-        listarP();  
-    }
 
     public Proveedor getProveedor() {
         return proveedor;
@@ -42,12 +33,12 @@ public class ProveedorBean implements Serializable {
     }
     
     public void listarP(){
-        this.listaP = pDAO.listarP();
+        proveedor = new Proveedor();
+        listaP = pDAO.listarP();
     }
     
     public void guardar(){
         pDAO.guardar(proveedor);
-        // Reiniciar el objeto después de guardar y refrescar la lista
         proveedor = new Proveedor(); 
         listarP();  
     }
@@ -64,6 +55,6 @@ public class ProveedorBean implements Serializable {
     
     public void eliminar(int id_proveedor){
         pDAO.eliminar(id_proveedor);
-        listarP();  // Recargar la lista después de eliminar
+        listarP();
     }
 }

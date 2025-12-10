@@ -9,10 +9,10 @@
     </h:head>
     <h:body>
         <h2 class="text-center text-primary">Administrar Proveedores</h2> 
-        
+        <f:event type="preRenderView" listener="#{proveedorBean.listarP()}" />
         <h:form>
             <div class="container">
-                <h:commandLink value="Nuevo Proveedor" class="text-primary" action="nuevoProveedor.xhtml" /> 
+                <h:commandLink value="Nuevo Proveedor" class="text-primary" action="nuevo" /> 
                 <h:commandLink value="Menú Anterior" class="text-secondary" action="/faces/admin/index"
                                style="margin-left: 15px;" />
                 <br/><br/>
