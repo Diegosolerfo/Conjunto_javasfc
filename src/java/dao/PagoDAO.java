@@ -18,7 +18,7 @@ public class PagoDAO {
 
     public void registrarPago(Pago p) {
         String sqlInsert = "INSERT INTO PAGOS (ID_DEUDA, ABONO, FECHA) VALUES (?, ?, ?)";
-        String sqlUpdateDeuda = "UPDATE DEUDAS SET SALDO_PENDIENTE = SALDO_PENDIENTE - ? WHERE ID_DEUDA = ?";
+        String sqlUpdateDeuda = "UPDATE DEUDA SET SALDO = SALDO - ? WHERE ID_DEUDA = ?";
         Connection con = null;
 
         try {
@@ -33,17 +33,21 @@ public class PagoDAO {
                 psInsert.executeUpdate();
             }
 
-            // 2. Actualizar la Deuda
+            // 2. Actualizar la Deuda (descontar el abono del saldo)
             try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdateDeuda)) {
                 psUpdate.setInt(1, p.getAbono());
                 psUpdate.setInt(2, p.getId_deuda());
-                psUpdate.executeUpdate();
+                int filasAfectadas = psUpdate.executeUpdate();
+                
+                if (filasAfectadas == 0) {
+                    throw new SQLException("No se encontró la deuda con ID: " + p.getId_deuda());
+                }
             }
             
             con.commit();
             
             FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Pago registrado y deuda actualizada."));
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Pago registrado y deuda actualizada correctamente."));
 
         } catch (SQLException e) {
             if (con != null) {
@@ -56,6 +60,7 @@ public class PagoDAO {
             FacesContext.getCurrentInstance().addMessage(null, 
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error de BD", "Fallo en el registro del pago: " + e.getMessage()));
             System.err.println("Error SQL al registrar pago: " + e.getMessage());
+            e.printStackTrace();
             
         } finally {
             if (con != null) {
@@ -95,6 +100,46 @@ public class PagoDAO {
                 new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error Crítico de Listado", "Fallo SQL: " + e.getMessage()));
             System.err.println("Error SQL al listar pagos: " + e.getMessage());
             
+        } finally {
+            if (con != null) {
+                try { con.close(); } catch (SQLException ex) {
+                    System.err.println("Error al cerrar conexión después de listar: " + ex.getMessage());
+                }
+            }
+        }
+        return lista;
+    }
+    
+    /**
+     * Lista pagos filtrados por ID de cliente (a través de deuda -> movimiento).
+     */
+    public List<Pago> listarPorCliente(long idCliente) {
+        List<Pago> lista = new ArrayList<>();
+        String sql = "SELECT p.ID_PAGO, p.ID_DEUDA, p.ABONO, p.FECHA " +
+                     "FROM PAGOS p " +
+                     "INNER JOIN DEUDA d ON p.ID_DEUDA = d.ID_DEUDA " +
+                     "INNER JOIN MOVIMIENTO m ON d.MOVIMIENTO = m.ID_MOVIMIENTO " +
+                     "WHERE m.CLIENTE = ? ORDER BY p.ID_PAGO DESC";
+        
+        Connection con = null;
+        try {
+            con = ConnBD.conectar();
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setLong(1, idCliente);
+                
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Pago p = new Pago();
+                        p.setId_pago(rs.getInt("ID_PAGO"));
+                        p.setId_deuda(rs.getInt("ID_DEUDA"));
+                        p.setAbono(rs.getInt("ABONO"));
+                        p.setFecha(rs.getString("FECHA"));
+                        lista.add(p);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error SQL al listar pagos por cliente: " + e.getMessage());
         } finally {
             if (con != null) {
                 try { con.close(); } catch (SQLException ex) {

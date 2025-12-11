@@ -49,21 +49,31 @@ itemLabel="#{m.observaciones}" />
                 </h:selectOneMenu>
                 <h:message for="mov" class="text-danger" />
 
-                <h:outputLabel value="Producto Comprado:" for="prod" />
-                <h:selectOneMenu id="prod"
+                <h:outputLabel value="Producto Comprado:" for="prod" />
+                <h:selectOneMenu id="prod"
 value="#{compraBean.compra.productoComprado}"
-class="form-select">
-                    <f:selectItems value="#{compraBean.listaProductos}"
+class="form-select" required="true" requiredMessage="Debe seleccionar un producto">
+                    <f:selectItem itemLabel="-- Seleccionar Producto --" itemValue="0" />
+                    <f:selectItems value="#{compraBean.listaProductos}"
 var="x"
 itemValue="#{x.idProducto}"
-itemLabel="#{x.nombreProducto}" /> 
-                </h:selectOneMenu>
-                <h:message for="prod" class="text-danger" />
+itemLabel="#{x.nombreProducto}" /> 
+                </h:selectOneMenu>
+                <h:message for="prod" class="text-danger" />
 
-                <h:outputLabel />
-                <h:commandButton value="Guardar" class="btn btn-success"
-                                 actionListener="#{compraBean.guardar()}"
-                                 action="index?faces-redirect=true" />
+                <h:outputLabel value="Cantidad:" for="cant" />
+                <h:inputText id="cant"
+value="#{compraBean.compra.cantidad}"
+class="form-control" required="true"
+requiredMessage="Debe ingresar la cantidad">
+                    <f:convertNumber integerOnly="true" />
+                    <f:validateLongRange minimum="1" />
+                </h:inputText>
+                <h:message for="cant" class="text-danger" />
+
+                <h:outputLabel />
+                <h:commandButton value="Guardar" class="btn btn-success"
+                                 action="#{compraBean.guardar()}" />
 
             </h:panelGrid>
         </center>

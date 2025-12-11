@@ -58,6 +58,37 @@ public class DeudaDAO {
     }
     
     /**
+     * Lista deudas filtradas por ID de cliente (a través del movimiento).
+     */
+    public List<Deuda> listarPorCliente(long idCliente) {
+        List<Deuda> lista = new ArrayList<>();
+        String sql = "SELECT d.* FROM DEUDA d " +
+                     "INNER JOIN MOVIMIENTO m ON d.MOVIMIENTO = m.ID_MOVIMIENTO " +
+                     "WHERE m.CLIENTE = ? ORDER BY d.ID_DEUDA DESC";
+        
+        try (Connection con = ConnBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setLong(1, idCliente);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Deuda d = new Deuda();
+                    d.setIdDeuda(rs.getInt("ID_DEUDA"));
+                    d.setSaldo(rs.getInt("SALDO"));
+                    d.setFechaVencimiento(rs.getDate("FECHA_VENCIMIENTO"));
+                    d.setMovimiento(rs.getInt("MOVIMIENTO"));
+                    d.setProductoPendiente(rs.getInt("PRODUCTO_PENDIENTE"));
+                    lista.add(d);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al listar deudas por cliente: " + e.getMessage());
+        }
+        return lista;
+    }
+    
+    /**
      * Actualiza una deuda existente.
      */
     public void actualizar(Deuda d) {
@@ -101,6 +132,32 @@ public class DeudaDAO {
             System.err.println("Error al buscar deuda: " + e.getMessage());
         }
         return d;
+    }
+    
+    /**
+     * Lista deudas con saldo pendiente mayor a 0 (para selección en pagos).
+     */
+    public List<Deuda> listarDeudasPendientes() {
+        List<Deuda> lista = new ArrayList<>();
+        String sql = "SELECT * FROM DEUDA WHERE SALDO > 0 ORDER BY ID_DEUDA DESC";
+        
+        try (Connection con = ConnBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Deuda d = new Deuda();
+                d.setIdDeuda(rs.getInt("ID_DEUDA"));
+                d.setSaldo(rs.getInt("SALDO"));
+                d.setFechaVencimiento(rs.getDate("FECHA_VENCIMIENTO"));
+                d.setMovimiento(rs.getInt("MOVIMIENTO"));
+                d.setProductoPendiente(rs.getInt("PRODUCTO_PENDIENTE"));
+                lista.add(d);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al listar deudas pendientes: " + e.getMessage());
+        }
+        return lista;
     }
 
     /**

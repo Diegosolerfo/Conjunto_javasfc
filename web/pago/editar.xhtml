@@ -6,6 +6,7 @@
 
     <f:metadata>
         <f:viewParam name="idPagoParam" value="#{pagoBean.idPagoParam}" required="true"/>
+        <f:viewAction action="#{pagoBean.verificarPermisosEdicion}" onPostback="false"/>
         <f:viewAction action="#{pagoBean.cargarPagoParaEdicion}" onPostback="false"/>
     </f:metadata>
 

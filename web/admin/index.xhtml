@@ -124,7 +124,7 @@
                     <h:commandButton value="Administrar Deuda" 
                                      action="/faces/deuda/index.xhtml" 
                                      styleClass="main-button"
-                                     rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+                                     rendered="#{loginBean.tipoUsuarioActual == 'CAJERO' or loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
                     
                     <h:commandButton value="Administrar Productos" 
                                      action="/faces/producto/index.xhtml" 
@@ -138,10 +138,12 @@
                     
                     <h:commandButton value="Administrar Movimiento" 
                                      action="/faces/movimientos/index.xhtml" 
-                                     styleClass="main-button"/>
-                  <h:commandButton value="Administrar Pago" 
-                 action="/faces/pago/index.xhtml?faces-redirect=true" 
-                 styleClass="main-button"/>
+                                     styleClass="main-button"
+                                     rendered="#{loginBean.tipoUsuarioActual == 'CAJERO' or loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+                    <h:commandButton value="Administrar Pago" 
+                                     action="/faces/pago/index.xhtml?faces-redirect=true"
+                                     styleClass="main-button"
+                                     rendered="#{loginBean.tipoUsuarioActual == 'CAJERO' or loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
                     
                 </div>
 

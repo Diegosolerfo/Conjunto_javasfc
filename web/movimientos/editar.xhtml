@@ -11,6 +11,7 @@
     </h:head>
 
     <h:body>
+        <f:event type="preRenderView" listener="#{movimientoBean.verificarPermisosEdicion}" />
 
         <h2 class="text-center text-primary">Editar Movimiento</h2>
         <br/>
@@ -63,7 +64,7 @@
                     <h:column />
                     <h:column>
                         <h:commandButton class="btn btn-success" value="Actualizar"
-                                         actionListener="#{movimientoBean.actualizar()}" action="index" />
+                                         action="#{movimientoBean.actualizar()}" />
                         <h:commandButton class="btn btn-secondary" value="Cancelar" action="index"
                                          style="margin-left: 15px;" immediate="true" />
                     </h:column>

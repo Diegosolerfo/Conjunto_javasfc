@@ -5,6 +5,7 @@ import dao.ProveedorDAO;
 import dao.ProductosDAO;
 import dao.MovimientoDAO;
 import dao.UsuarioDAO; // Importación añadida
+import dao.InventarioDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,9 @@ import modelo.Proveedor;
 import modelo.Productos;
 import modelo.Movimiento;
 import modelo.Usuario; // Importación añadida
+import modelo.Inventario;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 @ManagedBean
 @ViewScoped
@@ -28,6 +32,7 @@ public class CompraBean {
     // DAOs
     CompraDAO compraDAO = new CompraDAO();
     private final UsuarioDAO usuarioDAO = new UsuarioDAO(); // Instancia del DAO de Usuario
+    InventarioDAO inventarioDAO = new InventarioDAO();
 
     // Lista principal para la tabla del index
     List<Compra> listaCompras = new ArrayList<>();
@@ -110,9 +115,63 @@ public class CompraBean {
     listaCompras = compraDAO.listar();
     }
 
-    public void guardar() {
-    compraDAO.guardar(compra);
-    this.compra = new Compra();
+    public String guardar() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        
+        // Validar que se haya seleccionado un producto y una cantidad
+        if (compra.getProductoComprado() <= 0) {
+            context.addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", 
+                    "Debe seleccionar un producto."));
+            return null;
+        }
+        
+        if (compra.getCantidad() <= 0) {
+            context.addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", 
+                    "La cantidad debe ser mayor a 0."));
+            return null;
+        }
+        
+        // Guardar la compra
+        compraDAO.guardar(compra);
+        
+        // Sumar la cantidad al inventario
+        int idProducto = compra.getProductoComprado();
+        int cantidadComprada = compra.getCantidad();
+        
+        Inventario inventario = inventarioDAO.buscar(idProducto);
+        
+        if (inventario == null) {
+            // Si el producto no existe en inventario, crear un nuevo registro
+            inventario = new Inventario();
+            Productos producto = new Productos();
+            producto.setIdProducto(idProducto);
+            inventario.setId_item(producto);
+            inventario.setCantidad(cantidadComprada);
+            inventario.setUbicacion("Almacén Principal");
+            inventario.setEstado("DISPONIBLE");
+            inventarioDAO.guardar(inventario);
+            
+            context.addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", 
+                    "Compra registrada. Se creó un nuevo registro en inventario con " + 
+                    cantidadComprada + " unidades."));
+        } else {
+            // Si existe, sumar la cantidad
+            int cantidadExistente = inventario.getCantidad();
+            int cantidadTotal = cantidadExistente + cantidadComprada;
+            inventario.setCantidad(cantidadTotal);
+            inventarioDAO.actualizar(inventario);
+            
+            context.addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", 
+                    "Compra registrada. Se agregaron " + cantidadComprada + 
+                    " unidades al inventario. Cantidad total: " + cantidadTotal));
+        }
+        
+        this.compra = new Compra();
+        return "index?faces-redirect=true";
     }
 
     public String buscar(int idCompra) {

@@ -10,7 +10,7 @@
     </h:head>
 
     <h:body class="container">
-        
+        <f:event type="preRenderView" listener="#{loginBean.verif_sesion('CENTRAL')}" />
         <f:event type="preRenderView" listener="#{pagoBean.listarPagos}" />
         <h1 class="my-4 text-center text-info">🧾 Historial de Abonos (Pagos)</h1>
 
@@ -20,11 +20,11 @@
             </h:outputLink>
             <h:outputLink value="/Conjunto/faces/admin/index.xhtml" class="btn btn-secondary">
                 Menú Principal
-                
             </h:outputLink>
-            <h:outputLink value="nuevo.xhtml" class="btn btn-success">
-    Registrar Pago
-</h:outputLink>
+            <h:form style="display: inline;">
+                <h:commandButton action="#{pagoBean.nuevo()}" value="Registrar Pago" class="btn btn-success"
+                                 rendered="#{loginBean.tipoUsuarioActual == 'CAJERO' or loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+            </h:form>
         </div>
 
         <h:form id="listaPagosForm">
@@ -57,7 +57,8 @@
 
                 <h:column>
                     <f:facet name="header"><h:outputText value="Opciones"/></f:facet>
-                    <h:outputLink value="editar.xhtml" class="text-warning me-3">
+                    <h:outputLink value="editar.xhtml" class="text-warning me-3"
+                                  rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}">
                         Editar
                         <f:param name="idPagoParam" value="#{p.id_pago}" />
                     </h:outputLink>

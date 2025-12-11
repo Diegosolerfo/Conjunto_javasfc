@@ -10,15 +10,17 @@
     </h:head>
 
     <h:body class="container">
+        <f:event type="preRenderView" listener="#{loginBean.verif_sesion('CENTRAL')}" />
         <h1 class="my-4 text-center text-primary">💰 Administrar Deudas</h1>
 
         <div class="mb-3">
-            <h:outputLink value="/Conjunto/faces/deuda/nuevo.xhtml" class="btn btn-success me-2">
-    Nuevo Movimiento
-</h:outputLink>
+            <h:outputLink value="/Conjunto/faces/movimientos/nuevo.xhtml" class="btn btn-success me-2"
+                          rendered="#{loginBean.tipoUsuarioActual == 'CAJERO' or loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}">
+                Nueva Deuda
+            </h:outputLink>
             <h:outputLink value="/Conjunto/faces/admin/index.xhtml" class="btn btn-secondary">
-    Menú Principal
-</h:outputLink>
+                Menú Principal
+            </h:outputLink>
         </div>
 
         <h:form id="listaForm">
@@ -57,18 +59,20 @@
                 </h:column>
 
                 <h:column>
-    <f:facet name="header"><h:outputText value="Opciones"/></f:facet>
-    
-    <h:outputLink value="editar.xhtml" class="text-primary me-3">
-        Editar
-        <f:param name="idDeudaParam" value="#{d.idDeuda}" />
-    </h:outputLink>
-    
-    <h:commandLink action="#{deudaBean.eliminarDeuda(d)}" value="Eliminar" class="text-danger" 
-                   onclick="return confirm('¿Está seguro de eliminar la deuda ID #{d.idDeuda}?')" >
-        <f:ajax execute="@this" render="listaForm @global"/>
-    </h:commandLink>
-</h:column>
+                    <f:facet name="header"><h:outputText value="Opciones"/></f:facet>
+                    
+                    <h:outputLink value="editar.xhtml" class="text-primary me-3"
+                                  rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}">
+                        Editar
+                        <f:param name="idDeudaParam" value="#{d.idDeuda}" />
+                    </h:outputLink>
+                    
+                    <h:commandLink action="#{deudaBean.eliminarDeuda(d)}" value="Eliminar" class="text-danger" 
+                                   onclick="return confirm('¿Está seguro de eliminar la deuda ID #{d.idDeuda}?')"
+                                   rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" >
+                        <f:ajax execute="@this" render="listaForm @global"/>
+                    </h:commandLink>
+                </h:column>
             </h:dataTable>
         </h:form>
     </h:body>

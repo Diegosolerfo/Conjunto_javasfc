@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Mi Perfil</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+              crossorigin="anonymous"/>
+    </h:head>
+
+    <h:body>
+        <f:event type="preRenderView" listener="#{loginBean.verif_sesion('CENTRAL')}" />
+        <f:event type="preRenderView" listener="#{clienteBean.cargarMiPerfil}" />
+        
+        <div class="container my-5">
+            <h2 class="text-center text-primary mb-4">Mi Perfil</h2>
+            
+            <h:form class="col-md-8 mx-auto">
+                <h:messages globalOnly="false" style="color: red; margin-bottom: 15px;" />
+                
+                <div class="card p-4">
+                    <div class="mb-3">
+                        <h:outputLabel for="cedula" value="Cédula: " class="form-label fw-bold"/>
+                        <h:inputText id="cedula" value="#{clienteBean.miPerfil.cedula}" 
+                                     class="form-control" disabled="true" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h:outputLabel for="tipo" value="Tipo de Usuario: " class="form-label fw-bold"/>
+                        <h:inputText id="tipo" value="#{clienteBean.miPerfil.tipo_usuario}" 
+                                     class="form-control" disabled="true" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h:outputLabel for="nombre" value="Nombre: " class="form-label fw-bold"/>
+                        <h:inputText id="nombre" value="#{clienteBean.miPerfil.nombre}" 
+                                     class="form-control" required="true" 
+                                     requiredMessage="El nombre es obligatorio" />
+                        <h:message for="nombre" class="text-danger" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h:outputLabel for="apellido" value="Apellido: " class="form-label fw-bold"/>
+                        <h:inputText id="apellido" value="#{clienteBean.miPerfil.apellido}" 
+                                     class="form-control" required="true" 
+                                     requiredMessage="El apellido es obligatorio" />
+                        <h:message for="apellido" class="text-danger" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h:outputLabel for="correo" value="Correo: " class="form-label fw-bold"/>
+                        <h:inputText id="correo" value="#{clienteBean.miPerfil.correo}" 
+                                     class="form-control" required="true" 
+                                     requiredMessage="El correo es obligatorio" />
+                        <h:message for="correo" class="text-danger" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h:outputLabel for="telefono" value="Teléfono: " class="form-label fw-bold"/>
+                        <h:inputText id="telefono" value="#{clienteBean.miPerfil.telefono}" 
+                                     class="form-control" required="true" 
+                                     requiredMessage="El teléfono es obligatorio">
+                            <f:convertNumber integerOnly="true" />
+                        </h:inputText>
+                        <h:message for="telefono" class="text-danger" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h:outputLabel for="genero" value="Género: " class="form-label fw-bold"/>
+                        <h:selectOneMenu id="genero" value="#{clienteBean.miPerfil.genero}" 
+                                         class="form-select">
+                            <f:selectItem itemLabel="-- Seleccionar --" itemValue="" />
+                            <f:selectItem itemValue="M" itemLabel="Masculino" />
+                            <f:selectItem itemValue="F" itemLabel="Femenino" />
+                            <f:selectItem itemValue="O" itemLabel="Otro" />
+                        </h:selectOneMenu>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h:outputLabel for="fechaNac" value="Fecha de Nacimiento (YYYY-MM-DD): " class="form-label fw-bold"/>
+                        <h:inputText id="fechaNac" value="#{clienteBean.miPerfil.fecha_nacimiento}" 
+                                     class="form-control" placeholder="YYYY-MM-DD" />
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h:outputLabel for="claveNueva" value="Nueva Clave (Dejar vacío para no cambiar): " class="form-label fw-bold"/>
+                        <h:inputSecret id="claveNueva" value="#{clienteBean.miPerfil.claveNueva}" 
+                                       class="form-control" />
+                        <small class="form-text text-muted">Solo ingrese una nueva clave si desea cambiarla.</small>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <h:commandButton value="Actualizar Perfil" 
+                                         action="#{clienteBean.actualizarPerfil()}" 
+                                         class="btn btn-success btn-lg" />
+                        <h:commandButton value="Volver al Menú" 
+                                         action="index" 
+                                         class="btn btn-secondary btn-lg" 
+                                         style="margin-left: 15px;" />
+                    </div>
+                </div>
+            </h:form>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+                crossorigin="anonymous"></script>
+    </h:body>
+</html>
+

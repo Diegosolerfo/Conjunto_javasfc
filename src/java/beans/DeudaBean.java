@@ -107,6 +107,14 @@ public class DeudaBean implements Serializable {
     public void actualizarDeuda() {
         FacesContext context = FacesContext.getCurrentInstance();
         
+        // Verificar permisos: solo ADMINISTRADOR puede editar
+        String tipoUsuario = (String) context.getExternalContext().getSessionMap().get("tipo_usuario");
+        if (!"ADMINISTRADOR".equals(tipoUsuario)) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", 
+                "No tiene permisos para editar deudas. Solo los administradores pueden realizar esta acción."));
+            return;
+        }
+        
         try {
             if (this.fechaUtil != null) {
                 this.deuda.setFechaVencimiento(new Date(this.fechaUtil.getTime()));
@@ -145,6 +153,15 @@ public class DeudaBean implements Serializable {
      */
     public void eliminarDeuda(Deuda d) {
         FacesContext context = FacesContext.getCurrentInstance();
+        
+        // Verificar permisos: solo ADMINISTRADOR puede eliminar
+        String tipoUsuario = (String) context.getExternalContext().getSessionMap().get("tipo_usuario");
+        if (!"ADMINISTRADOR".equals(tipoUsuario)) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", 
+                "No tiene permisos para eliminar deudas. Solo los administradores pueden realizar esta acción."));
+            return;
+        }
+        
         try {
             dDAO.eliminar(d.getIdDeuda());
             listarDeudas();
@@ -152,6 +169,25 @@ public class DeudaBean implements Serializable {
         } catch (Exception e) {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo eliminar la deuda."));
             System.err.println("Error al eliminar deuda en Bean: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Verifica si el usuario tiene permisos para editar deudas.
+     * Redirige a index si es CAJERO.
+     */
+    public void verificarPermisosEdicion() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String tipoUsuario = (String) context.getExternalContext().getSessionMap().get("tipo_usuario");
+        
+        if (!"ADMINISTRADOR".equals(tipoUsuario)) {
+            try {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Acceso Denegado", 
+                    "No tiene permisos para editar deudas. Solo los administradores pueden realizar esta acción."));
+                context.getExternalContext().redirect(context.getExternalContext().getRequestContextPath() + "/faces/deuda/index.xhtml");
+            } catch (Exception e) {
+                System.err.println("Error al redirigir: " + e.getMessage());
+            }
         }
     }
     

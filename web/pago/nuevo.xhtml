@@ -4,47 +4,86 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <f:metadata>
-        <f:viewParam name="idDeudaParam" value="#{pagoBean.pago.id_deuda}" required="true" 
-                     requiredMessage="Debe especificar la Deuda a abonar."/>
-    </f:metadata>
-
     <h:head>
         <title>Registrar Abono (Pago)</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+              crossorigin="anonymous"/>
     </h:head>
 
-    <h:body class="container">
-        <h1 class="my-4 text-center text-success">💸 Registrar Abono a Deuda</h1>
+    <h:body>
+        <div class="container my-5">
+            <h2 class="text-center text-success mb-4">Registrar Abono a Deuda</h2>
 
-        <h:form class="col-md-6 mx-auto card p-4">
-            <h:messages globalOnly="true" class="mb-3 alert alert-info"/>
-            
-            <div class="mb-3">
-                <h:outputLabel value="Deuda ID a Abonar:" class="form-label"/>
-                <h:outputText value="#{pagoBean.pago.id_deuda}" class="form-control-plaintext fw-bold"/>
-            </div>
+            <h:form>
+                <div class="row">
+                    <div class="col-md-6 mx-auto">
+                        <h:messages globalOnly="false" style="color: red; margin-bottom: 15px;" />
+                        
+                        <!-- Selector de Deuda -->
+                        <div class="mb-3">
+                            <h:outputLabel for="deuda" value="Seleccionar Deuda: " class="form-label fw-bold"/>
+                            <h:selectOneMenu id="deuda" value="#{pagoBean.deudaSeleccionadaId}" 
+                                             class="form-select" 
+                                             required="true" requiredMessage="Debe seleccionar una deuda">
+                                <f:selectItem itemLabel="-- Seleccionar Deuda --" itemValue="0" />
+                                <f:selectItems value="#{pagoBean.listaDeudasPendientes}" var="d"
+                                               itemValue="#{d.idDeuda}" 
+                                               itemLabel="Deuda ID: #{d.idDeuda} - Saldo: $#{d.saldo}" />
+                                <f:ajax event="change" listener="#{pagoBean.cargarSaldoDeuda()}" render="saldoInfo abono" />
+                            </h:selectOneMenu>
+                            <h:message for="deuda" class="text-danger" />
+                        </div>
+                        
+                        <!-- Información del Saldo Pendiente -->
+                        <h:panelGroup id="saldoInfo">
+                            <h:panelGroup rendered="#{pagoBean.deudaSeleccionadaId != null and pagoBean.deudaSeleccionadaId > 0}">
+                                <div class="mb-3 alert alert-info">
+                                    <strong>Saldo Pendiente: $#{pagoBean.saldoPendiente}</strong>
+                                </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        
+                        <!-- Monto del Abono -->
+                        <div class="mb-3">
+                            <h:outputLabel for="abono" value="Monto del Abono ($): " class="form-label fw-bold"/>
+                            <h:inputText id="abono" value="#{pagoBean.pago.abono}" 
+                                         class="form-control"
+                                         required="true" requiredMessage="Debe ingresar el monto a abonar.">
+                                <f:convertNumber integerOnly="true" />
+                                <f:validateLongRange minimum="1" />
+                            </h:inputText>
+                            <h:message for="abono" class="text-danger" />
+                            <small class="form-text text-muted">
+                                El abono no puede ser mayor al saldo pendiente ($#{pagoBean.saldoPendiente})
+                            </small>
+                        </div>
+                        
+                        <!-- Fecha del Pago -->
+                        <div class="mb-3">
+                            <h:outputLabel for="fecha" value="Fecha del Pago (YYYY-MM-DD): " class="form-label fw-bold"/>
+                            <h:inputText id="fecha" value="#{pagoBean.pago.fecha}" 
+                                         class="form-control"
+                                         required="true" requiredMessage="La fecha es obligatoria."
+                                         placeholder="YYYY-MM-DD" />
+                            <h:message for="fecha" class="text-danger" />
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <h:commandButton action="#{pagoBean.realizarPago()}" 
+                                             value="Confirmar Pago" 
+                                             class="btn btn-success btn-lg" />
+                            <h:commandButton action="index" 
+                                             value="Cancelar" 
+                                             class="btn btn-secondary btn-lg" 
+                                             style="margin-left: 15px;" 
+                                             immediate="true" />
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </div>
 
-            <div class="mb-3">
-                <h:outputLabel for="abono" value="Monto del Abono ($):" class="form-label"/>
-                <h:inputText id="abono" value="#{pagoBean.pago.abono}" class="form-control"
-                              required="true" requiredMessage="Debe ingresar el monto a abonar.">
-                    <f:validateLongRange minimum="1"/>
-                </h:inputText>
-                <h:message for="abono" class="text-danger"/>
-            </div>
-
-            <div class="mb-3">
-                <h:outputLabel for="fecha" value="Fecha del Pago (YYYY-MM-DD):" class="form-label"/>
-                <h:inputText id="fecha" value="#{pagoBean.pago.fecha}" class="form-control"
-                              required="true" requiredMessage="La fecha es obligatoria."/>
-                <h:message for="fecha" class="text-danger"/>
-            </div>
-
-            <h:commandButton action="#{pagoBean.realizarPago()}" value="Confirmar Pago" class="btn btn-success mt-3 me-2" />
-            
-            <h:commandButton action="/deuda/index.xhtml?faces-redirect=true" value="Cancelar" class="btn btn-secondary mt-3" immediate="true" />
-
-        </h:form>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+                crossorigin="anonymous"></script>
     </h:body>
 </html>

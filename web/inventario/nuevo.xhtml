@@ -1,52 +1,82 @@
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<h:head>
-    <title>Registrar Item de Inventario</title>
-</h:head>
-<h:body>
-    <div class="container">
-        <h:form>
-            <h:commandLink action="index?faces-redirect=true" value="Lista de Inventario" immediate="true" />
-            <h2 class="title">Registrar Item de Inventario</h2>
 
-            <h:panelGrid columns="2" cellpadding="5">
+    <h:head>
+        <title>Registrar Item de Inventario</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+              rel="stylesheet"/>
+    </h:head>
+
+    <h:body>
+        <div class="container my-5">
+            <h:form>
+                <div class="mb-3">
+                    <h:commandLink value="← Volver a Lista" action="index?faces-redirect=true" class="btn btn-link text-secondary" immediate="true"/>
+                </div>
                 
-                <h:outputLabel value="Producto:" for="productoId" />
-                <h:selectOneMenu id="productoId" value="#{inventarioBean.inventario.id_item}" required="true" 
-                                 converter="omnifaces.SelectItemsConverter">
-                    <f:selectItem itemLabel="-- Seleccionar Producto --" itemValue="#{null}" noSelectionOption="true" />
-                    <f:selectItems value="#{inventarioBean.listaProductosDisponibles}" var="p" itemLabel="#{p.nombre}" itemValue="#{p}"/>
-                </h:selectOneMenu>
+                <h2 class="text-center text-primary mb-4">Registrar Item de Inventario</h2>
 
-                <h:outputLabel value="Ubicación:" for="ubicacion" />
-                <h:inputText id="ubicacion" value="#{inventarioBean.inventario.ubicacion}" required="true" />
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h:panelGrid columns="2" cellpadding="5" columnClasses="col-md-4,col-md-8" styleClass="table">
+                            
+                            <h:outputLabel value="Producto:" for="productoId" styleClass="form-label fw-bold"/>
+                            <h:selectOneMenu id="productoId" value="#{inventarioBean.idProductoSeleccionado}" required="true" 
+                                             styleClass="form-select"
+                                             requiredMessage="Debe seleccionar un producto">
+                                <f:selectItem itemLabel="-- Seleccionar Producto --" itemValue="0" noSelectionOption="true" />
+                                <f:selectItems value="#{inventarioBean.listaProductosDisponibles}" var="p" itemLabel="#{p.nombreProducto}" itemValue="#{p.idProducto}"/>
+                            </h:selectOneMenu>
 
-                <h:outputLabel value="Cantidad:" for="cantidad" />
-                <h:inputText id="cantidad" value="#{inventarioBean.inventario.cantidad}" required="true">
-                    <f:convertNumber integerOnly="true" />
-                </h:inputText>
+                            <h:outputLabel value="Ubicación:" for="ubicacion" styleClass="form-label fw-bold"/>
+                            <h:inputText id="ubicacion" value="#{inventarioBean.inventario.ubicacion}" 
+                                         required="true" styleClass="form-control"
+                                         requiredMessage="La ubicación es obligatoria"/>
 
-                <h:outputLabel value="Especificaciones:" for="specs" />
-                <h:inputText id="specs" value="#{inventarioBean.inventario.especificaciones}" required="true" />
+                            <h:outputLabel value="Cantidad:" for="cantidad" styleClass="form-label fw-bold"/>
+                            <h:inputText id="cantidad" value="#{inventarioBean.inventario.cantidad}" 
+                                         required="true" styleClass="form-control"
+                                         requiredMessage="La cantidad es obligatoria">
+                                <f:convertNumber integerOnly="true" />
+                            </h:inputText>
 
-                <h:outputLabel value="Fecha de Vencimiento:" for="vencimiento" />
-                <h:inputText id="vencimiento" value="#{inventarioBean.inventario.fecha_vencimiento}" required="true">
-                    <f:convertDateTime pattern="yyyy-MM-dd" />
-                </h:inputText>
-                
-                <h:outputLabel value="Estado:" for="estado" />
-                <h:selectOneMenu id="estado" value="#{inventarioBean.inventario.estado}" required="true">
-                    <f:selectItem itemLabel="DISPONIBLE" itemValue="DISPONIBLE" />
-                    <f:selectItem itemLabel="NO DISPONIBLE" itemValue="NO DISPONIBLE" />
-                </h:selectOneMenu>
-                
-            </h:panelGrid>
+                            <h:outputLabel value="Especificaciones:" for="specs" styleClass="form-label fw-bold"/>
+                            <h:inputText id="specs" value="#{inventarioBean.inventario.especificaciones}" 
+                                         required="true" styleClass="form-control"
+                                         requiredMessage="Las especificaciones son obligatorias"/>
 
-            <h:commandButton action="#{inventarioBean.guardar()}" value="Guardar Item" styleClass="btn-primary" style="margin-top: 20px;"/>
+                            <h:outputLabel value="Fecha de Vencimiento:" for="vencimiento" styleClass="form-label fw-bold"/>
+                            <h:inputText id="vencimiento" value="#{inventarioBean.fechaVencimientoUtil}" 
+                                         required="true" styleClass="form-control"
+                                         requiredMessage="La fecha de vencimiento es obligatoria">
+                                <f:convertDateTime pattern="yyyy-MM-dd" />
+                            </h:inputText>
+                            
+                            <h:outputLabel value="Estado:" for="estado" styleClass="form-label fw-bold"/>
+                            <h:selectOneMenu id="estado" value="#{inventarioBean.inventario.estado}" 
+                                             required="true" styleClass="form-select"
+                                             requiredMessage="El estado es obligatorio">
+                                <f:selectItem itemLabel="DISPONIBLE" itemValue="DISPONIBLE" />
+                                <f:selectItem itemLabel="NO DISPONIBLE" itemValue="NO DISPONIBLE" />
+                            </h:selectOneMenu>
+                            
+                        </h:panelGrid>
 
-        </h:form>
-    </div>
-</h:body>
+                        <div class="mt-4 text-center">
+                            <h:commandButton value="Guardar Item" action="#{inventarioBean.guardar()}" 
+                                             class="btn btn-primary me-2"/>
+                            <h:commandLink value="Cancelar" outcome="index" class="btn btn-secondary"/>
+                        </div>
+                        
+                        <h:messages globalOnly="false" style="color: red; margin-top: 15px;" />
+                    </div>
+                </div>
+            </h:form>
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    </h:body>
 </html>

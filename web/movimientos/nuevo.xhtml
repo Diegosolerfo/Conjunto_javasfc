@@ -6,76 +6,240 @@
 
     <h:head>
         <title>Nuevo Movimiento</title>
-        <style>
-            input{
-                width: 60vh;
-            }
-        </style>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
               crossorigin="anonymous"/>
     </h:head>
 
     <h:body>
-        <h2 class="text-center text-success">Nuevo Movimiento</h2>
-        <br/>
+        <div class="container my-5">
+            <h2 class="text-center text-success mb-4">Nuevo Movimiento</h2>
 
-        <center>
             <h:form>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 class="text-primary mb-3">Datos del Movimiento</h3>
+                        
+                        <div class="mb-3">
+                            <h:outputLabel for="cli" value="Cliente Asociado: " class="form-label fw-bold"/>
+                            <h:selectOneMenu id="cli" value="#{movimientoBean.movimiento.id_cliente}" 
+                                             class="form-select" 
+                                             required="true" requiredMessage="Debe seleccionar un cliente">
+                                <f:selectItem itemLabel="-- Seleccionar Cliente --" itemValue="0" /> 
+                                <f:selectItems value="#{movimientoBean.listaClientes}" var="cliente"
+                                               itemValue="#{cliente.idCliente}" 
+                                               itemLabel="#{cliente.nombreCompleto}" />
+                            </h:selectOneMenu>
+                            <h:message for="cli" class="text-danger" />
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h:outputLabel for="fec" value="Fecha Movimiento (YYYY-MM-DD): " class="form-label fw-bold"/>
+                            <h:inputText id="fec" value="#{movimientoBean.movimiento.fecha_movimiento}" 
+                                         class="form-control" 
+                                         required="true" requiredMessage="La fecha es obligatoria" 
+                                         placeholder="YYYY-MM-DD" />
+                            <h:message for="fec" class="text-danger" />
+                        </div>
 
-                <h:outputLabel for="val" value="Valor del Movimiento: " />
-                <h:inputText id="val" value="#{movimientoBean.movimiento.valor_movimiento}" class="form-control"
-                             required="true" requiredMessage="Debe especificar un valor" />
-                <h:message for="val" class="text-danger" />
+                        <div class="mb-3">
+                            <h:outputLabel for="tip" value="Tipo de Movimiento: " class="form-label fw-bold"/>
+                            <h:selectOneMenu id="tip" value="#{movimientoBean.movimiento.tipo_movimiento}" 
+                                             class="form-select" required="true">
+                                <f:selectItem itemValue="COMPRA" itemLabel="Compra" />
+                                <f:selectItem itemValue="VENTA" itemLabel="Venta" />
+                                <f:selectItem itemValue="DEUDA" itemLabel="Deuda" />
+                                <f:ajax event="change" render="seccionProductos seccionCompra" />
+                            </h:selectOneMenu>
+                            <h:message for="tip" class="text-danger" />
+                        </div>
 
-                <h:outputLabel for="desc" value="Descuento: " />
-                <h:inputText id="desc" value="#{movimientoBean.movimiento.descuento}" class="form-control" />
-                <h:message for="desc" class="text-danger" />
+                        <div class="mb-3">
+                            <h:outputLabel for="est" value="Estado: " class="form-label fw-bold"/>
+                            <h:selectOneMenu id="est" value="#{movimientoBean.movimiento.estado_movimiento}" 
+                                             class="form-select" required="true">
+                                <f:selectItem itemValue="REALIZADO" itemLabel="Realizado" />
+                                <f:selectItem itemValue="PENDIENTE" itemLabel="Pendiente" />
+                            </h:selectOneMenu>
+                            <h:message for="est" class="text-danger" />
+                        </div>
 
-                <h:outputLabel for="cli" value="Cliente Asociado: " />
-                <h:selectOneMenu id="cli" value="#{movimientoBean.movimiento.id_cliente}" class="form-select" 
-                                 required="true" requiredMessage="Debe seleccionar un cliente">
-                    <f:selectItem itemLabel="-- Seleccionar Cliente --" itemValue="" /> 
+                        <div class="mb-3">
+                            <h:outputLabel for="obs" value="Observaciones: " class="form-label fw-bold"/>
+                            <h:inputText id="obs" value="#{movimientoBean.movimiento.observaciones}" 
+                                         class="form-control" />
+                            <h:message for="obs" class="text-danger" />
+                        </div>
+                    </div>
                     
-                    <f:selectItems value="#{movimientoBean.listaClientes}" var="cliente"
-                                   itemValue="#{cliente.idCliente}" 
-                                   itemLabel="#{cliente.nombreCompleto}" />
-                </h:selectOneMenu>
-                <h:message for="cli" class="text-danger" />
+                    <div class="col-md-6">
+                        <!-- Sección de Productos (solo para VENTA o DEUDA) -->
+                        <h3 class="text-primary mb-3">Productos</h3>
+                        <h:panelGroup id="seccionProductos">
+                            <h:panelGroup rendered="#{movimientoBean.movimiento.tipo_movimiento == 'VENTA' or movimientoBean.movimiento.tipo_movimiento == 'DEUDA'}">
+                            <div class="mb-3">
+                                <h:outputLabel for="prod" value="Producto: " class="form-label fw-bold"/>
+                                <h:selectOneMenu id="prod" value="#{movimientoBean.productoSeleccionadoId}" 
+                                                 class="form-select">
+                                    <f:selectItem itemLabel="-- Seleccionar Producto --" itemValue="0" />
+                                    <f:selectItems value="#{movimientoBean.listaProductosDisponibles}" var="p"
+                                                   itemValue="#{p.idProducto}" 
+                                                   itemLabel="#{p.nombreProducto} - $#{p.valorUnitario}" />
+                                </h:selectOneMenu>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h:outputLabel for="cant" value="Cantidad: " class="form-label fw-bold"/>
+                                <h:inputText id="cant" value="#{movimientoBean.cantidadProducto}" 
+                                             class="form-control" style="width: 150px;">
+                                    <f:convertNumber integerOnly="true" />
+                                </h:inputText>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h:commandButton value="Agregar Producto" 
+                                                 action="#{movimientoBean.agregarProducto()}" 
+                                                 class="btn btn-primary btn-sm">
+                                    <f:ajax execute="prod cant" render="@form" />
+                                </h:commandButton>
+                            </div>
+                            
+                            <h:panelGroup id="mensajes">
+                                <h:messages globalOnly="false" style="color: blue; margin-top: 10px;" />
+                            </h:panelGroup>
+                            
+                            <!-- Tabla de productos seleccionados -->
+                            <div class="mb-3">
+                                <h4 class="text-secondary">Productos Agregados</h4>
+                                <h:dataTable value="#{movimientoBean.productosSeleccionados}" var="pm" 
+                                             class="table table-sm table-bordered"
+                                             rendered="#{not empty movimientoBean.productosSeleccionados}">
+                                    <h:column>
+                                        <f:facet name="header">Producto</f:facet>
+                                        #{pm.producto.nombreProducto}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Cantidad</f:facet>
+                                        #{pm.cantidad}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Precio Unit.</f:facet>
+                                        $#{pm.producto.valorUnitario}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Subtotal</f:facet>
+                                        $#{pm.subtotal}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Acción</f:facet>
+                                        <h:commandButton value="Eliminar" 
+                                                         action="#{movimientoBean.eliminarProducto(pm)}" 
+                                                         class="btn btn-danger btn-sm">
+                                            <f:ajax render="@form" />
+                                        </h:commandButton>
+                                    </h:column>
+                                </h:dataTable>
+                                
+                                <h:outputText value="No hay productos agregados aún." 
+                                              rendered="#{empty movimientoBean.productosSeleccionados}"
+                                              style="color: #6c757d; font-style: italic;" />
+                                
+                                <h:panelGroup rendered="#{not empty movimientoBean.productosSeleccionados}">
+                                    <div class="mt-2">
+                                        <strong>Subtotal: $#{movimientoBean.calcularTotal()}</strong>
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            
+                            <!-- Campo de descuento -->
+                            <div class="mb-3" id="desc">
+                                <h:outputLabel for="descInput" value="Descuento (%): " class="form-label fw-bold"/>
+                                <h:inputText id="descInput" value="#{movimientoBean.movimiento.descuento}" 
+                                             class="form-control" style="width: 150px;"
+                                             placeholder="0-100">
+                                    <f:convertNumber integerOnly="true" />
+                                    <f:ajax event="change" render="total" />
+                                </h:inputText>
+                                <small class="form-text text-muted">Ingrese un porcentaje entre 0 y 100</small>
+                            </div>
+                            
+                            <!-- Total con descuento -->
+                            <div class="mb-3" id="total">
+                                <h3 class="text-success">
+                                    Total: $#{movimientoBean.calcularTotalConDescuento()}
+                                </h3>
+                            </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        
+                        <!-- Para COMPRA, mostrar campos de proveedor, producto y cantidad -->
+                        <h:panelGroup id="seccionCompra">
+                            <h:panelGroup rendered="#{movimientoBean.movimiento.tipo_movimiento == 'COMPRA'}">
+                                <div class="mb-3">
+                                    <h:outputLabel for="provCompra" value="Proveedor: " class="form-label fw-bold"/>
+                                    <h:selectOneMenu id="provCompra" value="#{movimientoBean.proveedorSeleccionadoId}" 
+                                                     class="form-select" 
+                                                     required="true" requiredMessage="Debe seleccionar un proveedor">
+                                        <f:selectItem itemLabel="-- Seleccionar Proveedor --" itemValue="0" />
+                                        <f:selectItems value="#{movimientoBean.listaProveedores}" var="prov"
+                                                       itemValue="#{prov.id_proveedor}" 
+                                                       itemLabel="#{prov.nombre}" />
+                                    </h:selectOneMenu>
+                                    <h:message for="provCompra" class="text-danger" />
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <h:outputLabel for="prodCompra" value="Producto Comprado: " class="form-label fw-bold"/>
+                                    <h:selectOneMenu id="prodCompra" value="#{movimientoBean.productoCompraId}" 
+                                                     class="form-select" 
+                                                     required="true" requiredMessage="Debe seleccionar un producto">
+                                        <f:selectItem itemLabel="-- Seleccionar Producto --" itemValue="0" />
+                                        <f:selectItems value="#{movimientoBean.listaProductosDisponibles}" var="p"
+                                                       itemValue="#{p.idProducto}" 
+                                                       itemLabel="#{p.nombreProducto}" />
+                                    </h:selectOneMenu>
+                                    <h:message for="prodCompra" class="text-danger" />
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <h:outputLabel for="cantCompra" value="Cantidad: " class="form-label fw-bold"/>
+                                    <h:inputText id="cantCompra" value="#{movimientoBean.cantidadCompra}" 
+                                                 class="form-control"
+                                                 required="true" requiredMessage="Debe ingresar la cantidad">
+                                        <f:convertNumber integerOnly="true" />
+                                        <f:validateLongRange minimum="1" />
+                                    </h:inputText>
+                                    <h:message for="cantCompra" class="text-danger" />
+                                    <small class="form-text text-muted">La cantidad se sumará al inventario del producto seleccionado.</small>
+                                </div>
+                            </h:panelGroup>
+                            
+                            <!-- Para otros tipos o cuando no hay tipo seleccionado, mostrar campo de valor -->
+                            <div class="mb-3" id="campoValor"
+                                 rendered="#{movimientoBean.movimiento.tipo_movimiento != 'COMPRA' and movimientoBean.movimiento.tipo_movimiento != 'VENTA' and movimientoBean.movimiento.tipo_movimiento != 'DEUDA'}">
+                                <h:outputLabel for="val" value="Valor del Movimiento: " class="form-label fw-bold"/>
+                                <h:inputText id="val" value="#{movimientoBean.movimiento.valor_movimiento}" 
+                                             class="form-control"
+                                             required="true" requiredMessage="Debe especificar un valor">
+                                    <f:convertNumber integerOnly="true" />
+                                </h:inputText>
+                                <h:message for="val" class="text-danger" />
+                            </div>
+                        </h:panelGroup>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <h:commandButton class="btn btn-success btn-lg" value="Guardar Movimiento"
+                                     action="#{movimientoBean.guardar()}" />
+                    <h:commandButton class="btn btn-secondary btn-lg" value="Cancelar" 
+                                     action="index" style="margin-left: 15px;" immediate="true" />
+                </div>
                 
-                <h:outputLabel for="fec" value="Fecha Movimiento (YYYY-MM-DD): " />
-                <h:inputText id="fec" value="#{movimientoBean.movimiento.fecha_movimiento}" class="form-control" 
-                             required="true" requiredMessage="La fecha es obligatoria">
-                    <f:convertDateTime pattern="yyyy-MM-dd" /> 
-                </h:inputText>
-                <h:message for="fec" class="text-danger" />
-
-                <h:outputLabel for="obs" value="Observaciones: " />
-                <h:inputText id="obs" value="#{movimientoBean.movimiento.observaciones}" class="form-control" />
-                <h:message for="obs" class="text-danger" />
-
-                <h:outputLabel for="tip" value="Tipo de Movimiento: " />
-                <h:selectOneMenu id="tip" value="#{movimientoBean.movimiento.tipo_movimiento}" class="form-select">
-                    <f:selectItem itemValue="COMPRA" itemLabel="Compra" />
-                    <f:selectItem itemValue="VENTA" itemLabel="Venta" />
-                    <f:selectItem itemValue="DEUDA" itemLabel="Deuda" />
-                </h:selectOneMenu>
-                <h:message for="tip" class="text-danger" />
-
-                <h:outputLabel for="est" value="Estado: " />
-                <h:selectOneMenu id="est" value="#{movimientoBean.movimiento.estado_movimiento}" class="form-select">
-                    <f:selectItem itemValue="REALIZADO" itemLabel="Realizado" />
-                    <f:selectItem itemValue="PENDIENTE" itemLabel="Pendiente" />
-                </h:selectOneMenu>
-                <h:message for="est" class="text-danger" />
-
-                <br/><br/>
-
-                <h:commandButton class="btn btn-success" value="Guardar"
-                                 actionListener="#{movimientoBean.guardar()}" action="index" />
-                <h:commandButton class="btn btn-secondary" value="Cancelar" action="index"
-                                 style="margin-left: 15px;" immediate="true" />
-
+                <h:messages id="mensajesGlobales" globalOnly="false" style="color: red; margin-top: 15px;" />
             </h:form>
-        </center>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+                crossorigin="anonymous"></script>
     </h:body>
 </html>

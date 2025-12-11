@@ -19,7 +19,7 @@
         <h:form>
             <div class="container">
                 
-                <h:commandLink value="Nuevo Movimiento" class="text-primary" action="nuevo.xhtml" 
+                <h:commandButton value="Nuevo Movimiento" class="btn btn-primary" action="#{movimientoBean.nuevo()}" 
                                rendered="#{loginBean.tipoUsuarioActual == 'CAJERO' or loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
                                
                 <h:commandLink value="Menú Principal" class="text-secondary" action="/faces/admin/index"

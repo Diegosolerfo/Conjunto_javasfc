@@ -104,10 +104,41 @@ public class InventarioDAO {
     // BUSCAR
     // ----------------------------------------------------------
     public Inventario buscar(int idProducto) {
-        // Cierre de recursos omitido aquí por brevedad, pero debe estar implementado.
-        Inventario item = new Inventario();
-        String sql = "SELECT * FROM INVENTARIO WHERE ID_ITEM = ?";
-        // Lógica de búsqueda...
+        Inventario item = null;
+        String sql = "SELECT i.ID_ITEM, i.UBICACION, i.CANTIDAD, i.ESPECIFICACIONES, i.FECHA_VENCIMIENTO, i.ESTADO, p.NOMBRE_PRODUCTO "
+                   + "FROM INVENTARIO i JOIN PRODUCTO p ON i.ID_ITEM = p.ID_PRODUCTO WHERE i.ID_ITEM = ?";
+        
+        try {
+            con = ConnBD.conectar();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idProducto);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                item = new Inventario();
+                Productos p = new Productos();
+                
+                p.setId_producto(rs.getInt("ID_ITEM"));
+                p.setNombre(rs.getString("NOMBRE_PRODUCTO"));
+                item.setId_item(p);
+                
+                item.setUbicacion(rs.getString("UBICACION"));
+                item.setCantidad(rs.getInt("CANTIDAD"));
+                item.setEspecificaciones(rs.getString("ESPECIFICACIONES"));
+                item.setFecha_vencimiento(rs.getDate("FECHA_VENCIMIENTO"));
+                item.setEstado(rs.getString("ESTADO"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar item de inventario: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar recursos en InventarioDAO.buscar: " + ex.getMessage());
+            }
+        }
         return item;
     }
     
@@ -123,23 +154,33 @@ public class InventarioDAO {
             con = ConnBD.conectar();
             ps = con.prepareStatement(sql);
             
+            int idItem = item.getId_item().getIdProducto();
+            int cantidad = item.getCantidad();
+            
+            System.out.println("DEBUG InventarioDAO.actualizar: ID_ITEM=" + idItem + ", CANTIDAD=" + cantidad);
+            
             ps.setString(1, item.getUbicacion());
-            ps.setInt(2, item.getCantidad());
+            ps.setInt(2, cantidad);
             ps.setString(3, item.getEspecificaciones());
             ps.setDate(4, item.getFecha_vencimiento());
             ps.setString(5, item.getEstado());
+            ps.setInt(6, idItem);
             
-            ps.setInt(6, item.getId_item().getIdProducto()); 
+            int filasAfectadas = ps.executeUpdate();
+            System.out.println("DEBUG InventarioDAO.actualizar: Filas afectadas: " + filasAfectadas);
             
-            ps.executeUpdate();
+            if (filasAfectadas == 0) {
+                System.err.println("ADVERTENCIA: No se actualizó ninguna fila para ID_ITEM=" + idItem);
+            }
         } catch (SQLException e) {
-            System.out.println("Error al actualizar item de inventario: " + e.getMessage());
+            System.err.println("ERROR al actualizar item de inventario: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             try {
                 if (ps != null) ps.close(); 
                 if (con != null) con.close();
             } catch (SQLException ex) {
-                System.out.println("Error al cerrar recursos después de actualizar: " + ex.getMessage());
+                System.err.println("Error al cerrar recursos después de actualizar: " + ex.getMessage());
             }
         }
     }

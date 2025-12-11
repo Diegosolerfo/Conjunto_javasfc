@@ -35,7 +35,7 @@ public class LoginBean implements Serializable {
     }
 
     // ------------------------------------------------------------------
-    // AUTENTICACIÓN (USA CLAVE EN TEXTO PLANO)
+    // AUTENTICACIÓN (ENCRIPTA LA CLAVE ANTES DE COMPARAR)
     // ------------------------------------------------------------------
     public void autenticar(){
         try {
@@ -44,8 +44,9 @@ public class LoginBean implements Serializable {
             PreparedStatement ps = con.prepareStatement(sql);
             
             ps.setLong(1, usuario.getCedula());
-            // **IMPORTANTE:** Aquí se usa la clave en texto plano.
-            ps.setString(2, (usuario.getClave()));
+            // **IMPORTANTE:** Se encripta la clave ingresada para compararla con la encriptada en la BD
+            String claveEncriptada = Utils.encriptar(usuario.getClave());
+            ps.setString(2, claveEncriptada);
             
             ResultSet rs = ps.executeQuery();
             if(rs.next()){

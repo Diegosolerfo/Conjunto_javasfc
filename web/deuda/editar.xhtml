@@ -8,6 +8,7 @@
         <f:viewParam name="idDeudaParam" value="#{deudaBean.idDeudaParam}" required="true" 
                      requiredMessage="Debe especificar un ID de deuda"/>
         
+        <f:viewAction action="#{deudaBean.verificarPermisosEdicion}" onPostback="false"/>
         <f:viewAction action="#{deudaBean.cargarDeudaParaEdicion}" onPostback="false"/>
     </f:metadata>
 
