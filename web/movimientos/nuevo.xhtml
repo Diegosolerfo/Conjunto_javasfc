@@ -31,12 +31,22 @@
                 <h:inputText id="desc" value="#{movimientoBean.movimiento.descuento}" class="form-control" />
                 <h:message for="desc" class="text-danger" />
 
-                <h:outputLabel for="cli" value="ID Cliente: " />
-                <h:inputText id="cli" value="#{movimientoBean.movimiento.id_cliente}" class="form-control" />
+                <h:outputLabel for="cli" value="Cliente Asociado: " />
+                <h:selectOneMenu id="cli" value="#{movimientoBean.movimiento.id_cliente}" class="form-select" 
+                                 required="true" requiredMessage="Debe seleccionar un cliente">
+                    <f:selectItem itemLabel="-- Seleccionar Cliente --" itemValue="" /> 
+                    
+                    <f:selectItems value="#{movimientoBean.listaClientes}" var="cliente"
+                                   itemValue="#{cliente.idCliente}" 
+                                   itemLabel="#{cliente.nombreCompleto}" />
+                </h:selectOneMenu>
                 <h:message for="cli" class="text-danger" />
-
-                <h:outputLabel for="fec" value="Fecha Movimiento: " />
-                <h:inputText id="fec" value="#{movimientoBean.movimiento.fecha_movimiento}" class="form-control" />
+                
+                <h:outputLabel for="fec" value="Fecha Movimiento (YYYY-MM-DD): " />
+                <h:inputText id="fec" value="#{movimientoBean.movimiento.fecha_movimiento}" class="form-control" 
+                             required="true" requiredMessage="La fecha es obligatoria">
+                    <f:convertDateTime pattern="yyyy-MM-dd" /> 
+                </h:inputText>
                 <h:message for="fec" class="text-danger" />
 
                 <h:outputLabel for="obs" value="Observaciones: " />

@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Editar Mi Perfil (Cajero/Cliente)</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
+    </h:head>
+
+    <h:body>
+        <f:event type="preRenderView" listener="#{loginBean.verif_sesion('CENTRAL')}" /> 
+
+        <div class="container mt-5">
+            <h1 class="text-center text-primary">Mi Perfil</h1>
+            
+            <h:form class="col-md-6 offset-md-3">
+                
+                <div class="mb-3">
+                    <label class="form-label">Cédula</label>
+                    <h:inputText value="#{usuarioBean.usuario.cedula}" class="form-control" disabled="true" />
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Tipo de Usuario</label>
+                    <h:inputText value="#{usuarioBean.usuario.tipo_usuario}" class="form-control" disabled="true" />
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <h:inputText value="#{usuarioBean.usuario.nombre}" class="form-control" required="true" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Correo</label>
+                    <h:inputText value="#{usuarioBean.usuario.correo}" class="form-control" required="true" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Nueva Clave (Dejar vacío para no cambiar)</label>
+                    <h:inputSecret value="#{usuarioBean.usuario.claveNueva}" class="form-control" />
+                </div>
+
+                <div class="d-grid gap-2">
+                    <h:commandButton value="Guardar Cambios" 
+                                     action="#{usuarioBean.actualizar()}" 
+                                     class="btn btn-success" />
+                    
+                    <h:commandLink value="Cancelar y Volver" 
+                                   action="/faces/admin/index.xhtml?faces-redirect=true" 
+                                   class="btn btn-secondary mt-2" />
+                </div>
+            </h:form>
+        </div>
+    </h:body>
+</html>

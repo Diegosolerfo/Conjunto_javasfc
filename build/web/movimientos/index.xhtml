@@ -11,16 +11,18 @@
     </h:head>
 
     <h:body>
-
+        <f:event type="preRenderView" listener="#{loginBean.verif_sesion('CENTRAL')}" />
         <f:event type="preRenderView" listener="#{movimientoBean.listar()}" />
 
         <h2 class="text-center text-primary">Administrar Movimientos</h2>
 
         <h:form>
             <div class="container">
-
-                <h:commandLink value="Nuevo Movimiento" class="text-primary" action="nuevo.xhtml" />
-                <h:commandLink value="Menú Anterior" class="text-secondary" action="/faces/admin/index"
+                
+                <h:commandLink value="Nuevo Movimiento" class="text-primary" action="nuevo.xhtml" 
+                               rendered="#{loginBean.tipoUsuarioActual == 'CAJERO' or loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+                               
+                <h:commandLink value="Menú Principal" class="text-secondary" action="/faces/admin/index"
                                style="margin-left: 15px;" />
 
                 <br/><br/>
@@ -65,12 +67,16 @@
                     <h:column>
                         <f:facet name="header">Opciones</f:facet>
                         <div align="center">
+                            
                             <h:commandLink value="Editar" class="text-success"
                                            actionListener="#{movimientoBean.buscar(mov.id_movimiento)}"
-                                           action="editar" />
+                                           action="editar"
+                                           rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+                            
                             <h:commandLink value="Eliminar" class="text-danger" style="margin-left: 15px;"
                                            actionListener="#{movimientoBean.eliminar(mov.id_movimiento)}"
-                                           onclick="return confirm('¿Está seguro de eliminar el movimiento?')" />
+                                           onclick="return confirm('¿Está seguro de eliminar el movimiento?')" 
+                                           rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
                         </div>
                     </h:column>
 

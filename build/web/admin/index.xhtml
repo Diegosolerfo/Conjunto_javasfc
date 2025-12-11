@@ -4,7 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Administrador de Tienda</title>
+        <title>Panel Central de Gestión</title>
         <style>
             /* Reset básico y fuente */
             body {
@@ -92,26 +92,64 @@
         </style>
     </h:head>
     <h:body>
-        <f:event type="preRenderView" listener="#{loginBean.verif_sesion('ADMINISTRADOR')}" />
+        <f:event type="preRenderView" listener="#{loginBean.verif_sesion('CENTRAL')}" />
         
         <div id="main-container">
-            <h1>Panel de Administración</h1>
+            <h1>Panel Central de Gestión</h1> 
             <h2>Bienvenido(a), #{loginBean.nombreUsuario}</h2>
             
             <h:form>
                 <div class="button-grid">
-                    <h:commandButton value="Administrar Usuarios" action="/faces/usuarios/index.xhtml" styleClass="main-button" />
-                    <h:commandButton value="Administrar Proveedores" action="/faces/proveedores/index.xhtml" styleClass="main-button" />
-                    <h:commandButton value="Administrar Compra" action="/faces/compra/index.xhtml" styleClass="main-button" />
-                    <h:commandButton value="Administrar Deuda" action="/faces/deuda/index.xhtml" styleClass="main-button" />
-                    <h:commandButton value="Administrar Productos" action="/faces/producto/index.xhtml" styleClass="main-button"/>
-                    <h:commandButton value="Administrar Movimiento" action="/faces/movimientos/index.xhtml" styleClass="main-button"/>
-                    <h:commandButton value="Administrar Inventario" action="/faces/inventario/index.xhtml" styleClass="main-button"/>
+                    
+                    <h:commandButton value="Administrar Usuarios" 
+                                     action="/faces/usuarios/index.xhtml" 
+                                     styleClass="main-button"
+                                     rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+                    
+                   <h:commandButton value="Mi Perfil" 
+                                    actionListener="#{usuarioBean.cargarMiPerfil()}" 
+                                    styleClass="main-button"
+                                    rendered="#{loginBean.tipoUsuarioActual == 'CAJERO' || loginBean.tipoUsuarioActual == 'CLIENTE'}" />
+                   
+                    <h:commandButton value="Administrar Proveedores" 
+                                     action="/faces/proveedores/index.xhtml" 
+                                     styleClass="main-button"
+                                     rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+                    
+                    <h:commandButton value="Administrar Compra" 
+                                     action="/faces/compra/index.xhtml" 
+                                     styleClass="main-button"
+                                     rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+                    
+                    <h:commandButton value="Administrar Deuda" 
+                                     action="/faces/deuda/index.xhtml" 
+                                     styleClass="main-button"
+                                     rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+                    
+                    <h:commandButton value="Administrar Productos" 
+                                     action="/faces/producto/index.xhtml" 
+                                     styleClass="main-button"
+                                     rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+                    
+                    <h:commandButton value="Administrar Inventario" 
+                                     action="/faces/inventario/index.xhtml" 
+                                     styleClass="main-button"
+                                     rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+                    
+                    <h:commandButton value="Administrar Movimiento" 
+                                     action="/faces/movimientos/index.xhtml" 
+                                     styleClass="main-button"/>
+                  <h:commandButton value="Administrar Pago" 
+                 action="/faces/pago/index.xhtml?faces-redirect=true" 
+                 styleClass="main-button"/>
+                    
                 </div>
 
                 <br/><br/>
                 
-                <h:commandButton value="Cerrar Sesión" actionListener="#{loginBean.cerrar_sesion()}" styleClass="main-button logout-button" />
+                <h:commandButton value="Cerrar Sesión" 
+                                 actionListener="#{loginBean.cerrar_sesion()}" 
+                                 styleClass="main-button logout-button" />
             </h:form>
         </div>
     </h:body>

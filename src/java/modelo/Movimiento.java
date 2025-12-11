@@ -1,8 +1,12 @@
 package modelo;
 
 public class Movimiento {
-    private int id_movimiento, valor_movimiento,descuento, id_cliente;
-    private String fecha_movimiento, observaciones, tipo_movimiento,estado_movimiento;
+    
+    // CAMBIO CLAVE: id_cliente ahora es 'long' para ser compatible con BIGINT UNSIGNED en SQL
+    private int id_movimiento, valor_movimiento, descuento;
+    private long id_cliente; 
+    
+    private String fecha_movimiento, observaciones, tipo_movimiento, estado_movimiento;
 
     public int getId_movimiento() {
         return id_movimiento;
@@ -13,12 +17,11 @@ public class Movimiento {
     }
 
     // --- GETTER DE COMPATIBILIDAD CON XHTML ---
-    // Permite que la vista use #{m.idMovimiento}
     public int getIdMovimiento() {
         return id_movimiento;
     }
-    
-    // El resto de los getters/setters que ya tenías:
+
+    // El resto de los getters/setters:
 
     public int getValor_movimiento() {
         return valor_movimiento;
@@ -36,11 +39,12 @@ public class Movimiento {
         this.descuento = descuento;
     }
 
-    public int getId_cliente() {
+    // --- GETTER/SETTER CORREGIDOS PARA long ---
+    public long getId_cliente() {
         return id_cliente;
     }
 
-    public void setId_cliente(int id_cliente) {
+    public void setId_cliente(long id_cliente) {
         this.id_cliente = id_cliente;
     }
 
