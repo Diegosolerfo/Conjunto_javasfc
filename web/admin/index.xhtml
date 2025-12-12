@@ -145,6 +145,16 @@
                                      styleClass="main-button"
                                      rendered="#{loginBean.tipoUsuarioActual == 'CAJERO' or loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
                     
+                    <h:commandButton value="📊 Reportes de Inventario" 
+                                     action="/faces/reportes/inventario.xhtml" 
+                                     styleClass="main-button"
+                                     rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+                    
+                    <h:commandButton value="📊 Reportes de Movimientos" 
+                                     action="/faces/reportes/movimientos.xhtml" 
+                                     styleClass="main-button"
+                                     rendered="#{loginBean.tipoUsuarioActual == 'ADMINISTRADOR'}" />
+                    
                 </div>
 
                 <br/><br/>

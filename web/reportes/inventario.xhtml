@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Reportes de Inventario</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+              crossorigin="anonymous"/>
+    </h:head>
+
+    <h:body>
+        <f:event type="preRenderView" listener="#{loginBean.verif_sesion('ADMINISTRADOR')}" />
+        
+        <div class="container my-5">
+            <h2 class="text-center text-primary mb-4">📊 Reportes de Inventario</h2>
+            
+            <h:form>
+                <div class="mb-3">
+                    <h:commandButton value="Volver al Menú" action="/faces/admin/index.xhtml" 
+                                     class="btn btn-secondary" />
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Filtros de Disponibilidad</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5 class="text-success">Alta Disponibilidad</h5>
+                                <div class="mb-3">
+                                    <h:outputLabel for="umbralAlta" value="Umbral mínimo (cantidad mayor o igual): " class="form-label"/>
+                                    <h:inputText id="umbralAlta" value="#{reporteBean.umbralAlta}" 
+                                                 class="form-control" type="number" />
+                                </div>
+                                <h:commandButton value="Generar Reporte" 
+                                                 action="#{reporteBean.generarReporteAltaDisponibilidad()}" 
+                                                 class="btn btn-success" />
+                            </div>
+                            <div class="col-md-6">
+                                <h5 class="text-warning">Baja Disponibilidad</h5>
+                                <div class="mb-3">
+                                    <h:outputLabel for="umbralBaja" value="Umbral máximo (cantidad menor o igual): " class="form-label"/>
+                                    <h:inputText id="umbralBaja" value="#{reporteBean.umbralBaja}" 
+                                                 class="form-control" type="number" />
+                                </div>
+                                <h:commandButton value="Generar Reporte" 
+                                                 action="#{reporteBean.generarReporteBajaDisponibilidad()}" 
+                                                 class="btn btn-warning" />
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <h:commandButton value="Limpiar Reportes" 
+                                             action="#{reporteBean.limpiarReportesInventario()}" 
+                                             class="btn btn-secondary" />
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reporte de Alta Disponibilidad -->
+                <h:panelGroup rendered="#{not empty reporteBean.inventarioAltaDisponibilidad}">
+                    <div class="card mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h4 class="mb-0">✅ Productos con Alta Disponibilidad (mayor o igual a #{reporteBean.umbralAlta} unidades)</h4>
+                        </div>
+                        <div class="card-body">
+                            <h:dataTable value="#{reporteBean.inventarioAltaDisponibilidad}" var="item"
+                                         class="table table-bordered table-striped table-hover">
+                                <h:column>
+                                    <f:facet name="header"><strong>ID Producto</strong></f:facet>
+                                    #{item.id_item.idProducto}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Producto</strong></f:facet>
+                                    #{item.id_item.nombre}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Cantidad</strong></f:facet>
+                                    <span class="badge bg-success">#{item.cantidad}</span>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Ubicación</strong></f:facet>
+                                    #{item.ubicacion}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Estado</strong></f:facet>
+                                    #{item.estado}
+                                </h:column>
+                            </h:dataTable>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                
+                <!-- Reporte de Baja Disponibilidad -->
+                <h:panelGroup rendered="#{not empty reporteBean.inventarioBajaDisponibilidad}">
+                    <div class="card mb-4">
+                        <div class="card-header bg-warning text-dark">
+                            <h4 class="mb-0">⚠️ Productos con Baja Disponibilidad (menor o igual a #{reporteBean.umbralBaja} unidades)</h4>
+                        </div>
+                        <div class="card-body">
+                            <h:dataTable value="#{reporteBean.inventarioBajaDisponibilidad}" var="item"
+                                         class="table table-bordered table-striped table-hover">
+                                <h:column>
+                                    <f:facet name="header"><strong>ID Producto</strong></f:facet>
+                                    #{item.id_item.idProducto}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Producto</strong></f:facet>
+                                    #{item.id_item.nombre}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Cantidad</strong></f:facet>
+                                    <span class="badge bg-warning text-dark">#{item.cantidad}</span>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Ubicación</strong></f:facet>
+                                    #{item.ubicacion}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Estado</strong></f:facet>
+                                    #{item.estado}
+                                </h:column>
+                            </h:dataTable>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                
+                <!-- Mensaje cuando no hay reportes -->
+                <h:panelGroup rendered="#{empty reporteBean.inventarioAltaDisponibilidad and empty reporteBean.inventarioBajaDisponibilidad}">
+                    <div class="alert alert-info text-center" role="alert">
+                        <h5 class="alert-heading">📋 Sin Reportes Generados</h5>
+                        <p class="mb-0">Utiliza los filtros arriba para generar reportes de inventario.</p>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+                crossorigin="anonymous"></script>
+    </h:body>
+</html>
+

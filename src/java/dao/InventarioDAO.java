@@ -216,4 +216,98 @@ public class InventarioDAO {
             }
         }
     }
+    
+    // ----------------------------------------------------------
+    // REPORTES: Listar por cantidad (alta/baja disponibilidad)
+    // ----------------------------------------------------------
+    
+    /**
+     * Lista productos con alta disponibilidad (cantidad mayor o igual al umbral).
+     */
+    public List<Inventario> listarAltaDisponibilidad(int umbralMinimo) {
+        List<Inventario> lista = new ArrayList<>();
+        String sql = "SELECT i.ID_ITEM, i.UBICACION, i.CANTIDAD, i.ESPECIFICACIONES, i.FECHA_VENCIMIENTO, i.ESTADO, p.NOMBRE_PRODUCTO "
+                   + "FROM INVENTARIO i JOIN PRODUCTO p ON i.ID_ITEM = p.ID_PRODUCTO "
+                   + "WHERE i.CANTIDAD >= ? ORDER BY i.CANTIDAD DESC";
+
+        try {
+            con = ConnBD.conectar();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, umbralMinimo);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Inventario item = new Inventario();
+                Productos p = new Productos();
+                
+                p.setId_producto(rs.getInt("ID_ITEM"));
+                p.setNombre(rs.getString("NOMBRE_PRODUCTO"));
+                item.setId_item(p);
+                
+                item.setUbicacion(rs.getString("UBICACION"));
+                item.setCantidad(rs.getInt("CANTIDAD"));
+                item.setEspecificaciones(rs.getString("ESPECIFICACIONES"));
+                item.setFecha_vencimiento(rs.getDate("FECHA_VENCIMIENTO"));
+                item.setEstado(rs.getString("ESTADO"));
+                
+                lista.add(item);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al listar inventario de alta disponibilidad: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar recursos en InventarioDAO.listarAltaDisponibilidad: " + ex.getMessage());
+            }
+        }
+        return lista;
+    }
+    
+    /**
+     * Lista productos con baja disponibilidad (cantidad menor o igual al umbral).
+     */
+    public List<Inventario> listarBajaDisponibilidad(int umbralMaximo) {
+        List<Inventario> lista = new ArrayList<>();
+        String sql = "SELECT i.ID_ITEM, i.UBICACION, i.CANTIDAD, i.ESPECIFICACIONES, i.FECHA_VENCIMIENTO, i.ESTADO, p.NOMBRE_PRODUCTO "
+                   + "FROM INVENTARIO i JOIN PRODUCTO p ON i.ID_ITEM = p.ID_PRODUCTO "
+                   + "WHERE i.CANTIDAD <= ? ORDER BY i.CANTIDAD ASC";
+
+        try {
+            con = ConnBD.conectar();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, umbralMaximo);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Inventario item = new Inventario();
+                Productos p = new Productos();
+                
+                p.setId_producto(rs.getInt("ID_ITEM"));
+                p.setNombre(rs.getString("NOMBRE_PRODUCTO"));
+                item.setId_item(p);
+                
+                item.setUbicacion(rs.getString("UBICACION"));
+                item.setCantidad(rs.getInt("CANTIDAD"));
+                item.setEspecificaciones(rs.getString("ESPECIFICACIONES"));
+                item.setFecha_vencimiento(rs.getDate("FECHA_VENCIMIENTO"));
+                item.setEstado(rs.getString("ESTADO"));
+                
+                lista.add(item);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al listar inventario de baja disponibilidad: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException ex) {
+                System.out.println("Error al cerrar recursos en InventarioDAO.listarBajaDisponibilidad: " + ex.getMessage());
+            }
+        }
+        return lista;
+    }
 }

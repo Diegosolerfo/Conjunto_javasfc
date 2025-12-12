@@ -1,0 +1,197 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Reportes de Movimientos</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+              crossorigin="anonymous"/>
+    </h:head>
+
+    <h:body>
+        <f:event type="preRenderView" listener="#{loginBean.verif_sesion('ADMINISTRADOR')}" />
+        
+        <div class="container my-5">
+            <h2 class="text-center text-primary mb-4">📊 Reportes de Movimientos</h2>
+            
+            <h:form>
+                <div class="mb-3">
+                    <h:commandButton value="Volver al Menú" action="/faces/admin/index.xhtml" 
+                                     class="btn btn-secondary" />
+                </div>
+                
+                <!-- Filtros -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Filtros de Reportes</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Reporte por Tipo de Movimiento</h5>
+                                <div class="mb-3">
+                                    <h:outputLabel for="tipoMov" value="Tipo: " class="form-label"/>
+                                    <h:selectOneMenu id="tipoMov" value="#{reporteBean.tipoMovimientoSeleccionado}" 
+                                                     class="form-select">
+                                        <f:selectItem itemLabel="-- Seleccionar Tipo --" itemValue="" />
+                                        <f:selectItem itemValue="VENTA" itemLabel="VENTA" />
+                                        <f:selectItem itemValue="COMPRA" itemLabel="COMPRA" />
+                                        <f:selectItem itemValue="DEUDA" itemLabel="DEUDA" />
+                                    </h:selectOneMenu>
+                                </div>
+                                <h:commandButton value="Generar Reporte por Tipo" 
+                                                 action="#{reporteBean.generarReportePorTipo()}" 
+                                                 class="btn btn-info" />
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Reporte por Rango de Fechas</h5>
+                                <div class="mb-3">
+                                    <h:outputLabel for="fechaIni" value="Fecha Inicio (YYYY-MM-DD): " class="form-label"/>
+                                    <h:inputText id="fechaIni" value="#{reporteBean.fechaInicio}" 
+                                                 class="form-control" placeholder="YYYY-MM-DD" />
+                                </div>
+                                <div class="mb-3">
+                                    <h:outputLabel for="fechaFin" value="Fecha Fin (YYYY-MM-DD): " class="form-label"/>
+                                    <h:inputText id="fechaFin" value="#{reporteBean.fechaFin}" 
+                                                 class="form-control" placeholder="YYYY-MM-DD" />
+                                </div>
+                                <h:commandButton value="Generar Reporte por Fechas" 
+                                                 action="#{reporteBean.generarReportePorFechas()}" 
+                                                 class="btn btn-info" />
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <h:commandButton value="Generar Resumen por Tipo" 
+                                             action="#{reporteBean.generarResumenPorTipo()}" 
+                                             class="btn btn-success" />
+                            <h:commandButton value="Limpiar Reportes" 
+                                             action="#{reporteBean.limpiarReportesMovimientos()}" 
+                                             class="btn btn-secondary" 
+                                             style="margin-left: 10px;" />
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Resumen por Tipo -->
+                <h:panelGroup rendered="#{not empty reporteBean.resumenPorTipo}">
+                    <div class="card mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h4 class="mb-0">💰 Resumen de Totales por Tipo de Movimiento</h4>
+                        </div>
+                        <div class="card-body">
+                            <h:dataTable value="#{reporteBean.resumenPorTipo.entrySet()}" var="entry"
+                                         class="table table-bordered table-striped">
+                                <h:column>
+                                    <f:facet name="header"><strong>Tipo de Movimiento</strong></f:facet>
+                                    #{entry.key}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Total</strong></f:facet>
+                                    <span class="badge bg-primary">$#{entry.value}</span>
+                                </h:column>
+                            </h:dataTable>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                
+                <!-- Reporte por Tipo -->
+                <h:panelGroup rendered="#{not empty reporteBean.movimientosPorTipo}">
+                    <div class="card mb-4">
+                        <div class="card-header bg-info text-white">
+                            <h4 class="mb-0">📋 Movimientos - Tipo: #{reporteBean.tipoMovimientoSeleccionado}</h4>
+                        </div>
+                        <div class="card-body">
+                            <h:dataTable value="#{reporteBean.movimientosPorTipo}" var="mov"
+                                         class="table table-bordered table-striped table-hover">
+                                <h:column>
+                                    <f:facet name="header"><strong>ID</strong></f:facet>
+                                    #{mov.id_movimiento}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Valor</strong></f:facet>
+                                    $#{mov.valor_movimiento}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Descuento</strong></f:facet>
+                                    #{mov.descuento}%
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Fecha</strong></f:facet>
+                                    #{mov.fecha_movimiento}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Cliente</strong></f:facet>
+                                    #{mov.id_cliente}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Estado</strong></f:facet>
+                                    <span class="badge #{mov.estado_movimiento == 'REALIZADO' ? 'bg-success' : 'bg-warning'}">
+                                        #{mov.estado_movimiento}
+                                    </span>
+                                </h:column>
+                            </h:dataTable>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                
+                <!-- Reporte por Fechas -->
+                <h:panelGroup rendered="#{not empty reporteBean.movimientosPorFecha}">
+                    <div class="card mb-4">
+                        <div class="card-header bg-info text-white">
+                            <h4 class="mb-0">📅 Movimientos - Desde #{reporteBean.fechaInicio} hasta #{reporteBean.fechaFin}</h4>
+                        </div>
+                        <div class="card-body">
+                            <h:dataTable value="#{reporteBean.movimientosPorFecha}" var="mov"
+                                         class="table table-bordered table-striped table-hover">
+                                <h:column>
+                                    <f:facet name="header"><strong>ID</strong></f:facet>
+                                    #{mov.id_movimiento}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Tipo</strong></f:facet>
+                                    #{mov.tipo_movimiento}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Valor</strong></f:facet>
+                                    $#{mov.valor_movimiento}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Descuento</strong></f:facet>
+                                    #{mov.descuento}%
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Fecha</strong></f:facet>
+                                    #{mov.fecha_movimiento}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Cliente</strong></f:facet>
+                                    #{mov.id_cliente}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header"><strong>Estado</strong></f:facet>
+                                    <span class="badge #{mov.estado_movimiento == 'REALIZADO' ? 'bg-success' : 'bg-warning'}">
+                                        #{mov.estado_movimiento}
+                                    </span>
+                                </h:column>
+                            </h:dataTable>
+                        </div>
+                    </div>
+                </h:panelGroup>
+                
+                <!-- Mensaje cuando no hay reportes -->
+                <h:panelGroup rendered="#{empty reporteBean.movimientosPorTipo and empty reporteBean.movimientosPorFecha and empty reporteBean.resumenPorTipo}">
+                    <div class="alert alert-info text-center" role="alert">
+                        <h5 class="alert-heading">📋 Sin Reportes Generados</h5>
+                        <p class="mb-0">Utiliza los filtros arriba para generar reportes de movimientos.</p>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+                crossorigin="anonymous"></script>
+    </h:body>
+</html>
+

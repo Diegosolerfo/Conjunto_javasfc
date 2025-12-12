@@ -38,38 +38,61 @@ public class LoginBean implements Serializable {
     // AUTENTICACIÓN (ENCRIPTA LA CLAVE ANTES DE COMPARAR)
     // ------------------------------------------------------------------
     public void autenticar(){
-        try {
-            Connection con = ConnBD.conectar();
-            String sql = "SELECT * FROM USUARIO WHERE cedula = ? AND clave = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            
-            ps.setLong(1, usuario.getCedula());
-            // **IMPORTANTE:** Se encripta la clave ingresada para compararla con la encriptada en la BD
-            String claveEncriptada = Utils.encriptar(usuario.getClave());
-            ps.setString(2, claveEncriptada);
-            
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-
-                // Guardar datos clave en la sesión
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", rs.getString("nombre"));
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("tipo_usuario", rs.getString("TIPO_USUARIO"));
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cedula_usuario", rs.getLong("CEDULA"));
-
-                // Redirección
-                String dir = "/faces/admin"; 
-                if ("CLIENTE".equals(rs.getString("TIPO_USUARIO"))) {
-                    dir = "/faces/clie";
-                }
-
-                String rootPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-                FacesContext.getCurrentInstance().getExternalContext().redirect(rootPath + dir + "/index.xhtml");
-                FacesContext.getCurrentInstance().responseComplete();
-            }else{
+        // Validar que el usuario y la clave no sean null
+        if (usuario == null || usuario.getClave() == null || usuario.getClave().isEmpty()) {
+            try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("error.xhtml");
+            } catch (IOException e) {
+                System.out.println("Error al redirigir: " + e.getMessage());
+            }
+            return;
+        }
+        
+        try (Connection con = ConnBD.conectar()) {
+            if (con == null) {
+                System.out.println("Error: No se pudo establecer conexión con la base de datos");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("error.xhtml");
+                return;
+            }
+            
+            String sql = "SELECT * FROM USUARIO WHERE cedula = ? AND clave = ?";
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                
+                ps.setLong(1, usuario.getCedula());
+                // **IMPORTANTE:** Se encripta la clave ingresada para compararla con la encriptada en la BD
+                String claveEncriptada = Utils.encriptar(usuario.getClave());
+                if (claveEncriptada == null) {
+                    System.out.println("Error: No se pudo encriptar la clave");
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("error.xhtml");
+                    return;
+                }
+                ps.setString(2, claveEncriptada);
+                
+                try (ResultSet rs = ps.executeQuery()) {
+                    if(rs.next()){
+
+                        // Guardar datos clave en la sesión
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", rs.getString("nombre"));
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("tipo_usuario", rs.getString("TIPO_USUARIO"));
+                        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("cedula_usuario", rs.getLong("CEDULA"));
+
+                        // Redirección
+                        String dir = "/faces/admin"; 
+                        if ("CLIENTE".equals(rs.getString("TIPO_USUARIO"))) {
+                            dir = "/faces/clie";
+                        }
+
+                        String rootPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+                        FacesContext.getCurrentInstance().getExternalContext().redirect(rootPath + dir + "/index.xhtml");
+                        FacesContext.getCurrentInstance().responseComplete();
+                    }else{
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("error.xhtml");
+                    }
+                }
             }
         } catch (SQLException | IOException e) {
             System.out.println("Login error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     

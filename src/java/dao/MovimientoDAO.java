@@ -157,6 +157,102 @@ public class MovimientoDAO {
 
         return m;
     }
+    
+    // ----------------------------------------------------------
+    // REPORTES: Métodos para generar reportes de movimientos
+    // ----------------------------------------------------------
+    
+    /**
+     * Lista movimientos filtrados por tipo.
+     */
+    public List<Movimiento> listarPorTipo(String tipoMovimiento) {
+        List<Movimiento> lista = new ArrayList<>();
+        String sql = "SELECT * FROM MOVIMIENTO WHERE TIPO_MOVIMIENTO = ? ORDER BY ID_MOVIMIENTO DESC";
+
+        try (Connection con = ConnBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, tipoMovimiento);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Movimiento m = new Movimiento();
+                    m.setId_movimiento(rs.getInt("ID_MOVIMIENTO"));
+                    m.setValor_movimiento(rs.getInt("VALOR_MOVIMIENTO"));
+                    m.setDescuento(rs.getInt("DESCUENTO"));
+                    m.setId_cliente(rs.getLong("CLIENTE"));
+                    m.setFecha_movimiento(rs.getString("FECHA_MOVIMIENTO"));
+                    m.setObservaciones(rs.getString("OBSERVACIONES"));
+                    m.setTipo_movimiento(rs.getString("TIPO_MOVIMIENTO"));
+                    m.setEstado_movimiento(rs.getString("ESTADO_MOVIMIENTO"));
+                    lista.add(m);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error SQL al listar movimientos por tipo: " + e.getMessage());
+        }
+
+        return lista;
+    }
+    
+    /**
+     * Lista movimientos filtrados por rango de fechas.
+     */
+    public List<Movimiento> listarPorRangoFechas(String fechaInicio, String fechaFin) {
+        List<Movimiento> lista = new ArrayList<>();
+        String sql = "SELECT * FROM MOVIMIENTO WHERE FECHA_MOVIMIENTO >= ? AND FECHA_MOVIMIENTO <= ? ORDER BY FECHA_MOVIMIENTO DESC, ID_MOVIMIENTO DESC";
+
+        try (Connection con = ConnBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, fechaInicio);
+            ps.setString(2, fechaFin);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Movimiento m = new Movimiento();
+                    m.setId_movimiento(rs.getInt("ID_MOVIMIENTO"));
+                    m.setValor_movimiento(rs.getInt("VALOR_MOVIMIENTO"));
+                    m.setDescuento(rs.getInt("DESCUENTO"));
+                    m.setId_cliente(rs.getLong("CLIENTE"));
+                    m.setFecha_movimiento(rs.getString("FECHA_MOVIMIENTO"));
+                    m.setObservaciones(rs.getString("OBSERVACIONES"));
+                    m.setTipo_movimiento(rs.getString("TIPO_MOVIMIENTO"));
+                    m.setEstado_movimiento(rs.getString("ESTADO_MOVIMIENTO"));
+                    lista.add(m);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error SQL al listar movimientos por rango de fechas: " + e.getMessage());
+        }
+
+        return lista;
+    }
+    
+    /**
+     * Obtiene un resumen de totales por tipo de movimiento.
+     * Retorna un Map con el tipo como clave y el total como valor.
+     */
+    public java.util.Map<String, Integer> obtenerResumenPorTipo() {
+        java.util.Map<String, Integer> resumen = new java.util.HashMap<>();
+        String sql = "SELECT TIPO_MOVIMIENTO, SUM(VALOR_MOVIMIENTO) as TOTAL " +
+                     "FROM MOVIMIENTO GROUP BY TIPO_MOVIMIENTO";
+
+        try (Connection con = ConnBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                String tipo = rs.getString("TIPO_MOVIMIENTO");
+                int total = rs.getInt("TOTAL");
+                resumen.put(tipo, total);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error SQL al obtener resumen por tipo: " + e.getMessage());
+        }
+
+        return resumen;
+    }
 
     public void actualizar(Movimiento m) {
         String sql = "UPDATE movimiento SET "
