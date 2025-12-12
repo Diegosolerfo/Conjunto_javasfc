@@ -8,6 +8,90 @@
         <title>Mis Movimientos</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
               crossorigin="anonymous"/>
+        <style>
+            :root {
+                --cafe-oscuro: #4A2C2A;
+                --cafe-medio: #6D4C41;
+                --cafe-claro: #8B5E3C;
+                --cafe-beige: #D7B08B;
+                --cafe-fondo: #F5E6D3;
+            }
+
+            body {
+                background: linear-gradient(135deg, var(--cafe-fondo) 0%, #E8D5C4 100%);
+                min-height: 100vh;
+                padding: 20px 0;
+            }
+
+            .container {
+                background-color: #ffffff;
+                border-radius: 15px;
+                padding: 30px;
+                box-shadow: 0 8px 30px rgba(74, 44, 42, 0.15);
+            }
+
+            h2 {
+                color: var(--cafe-oscuro);
+                font-weight: 500;
+                margin-bottom: 25px;
+            }
+
+            .btn-secondary {
+                background-color: #8B7D6B;
+                border-color: #8B7D6B;
+                color: white;
+                font-weight: 600;
+            }
+
+            .btn-secondary:hover {
+                background-color: #6D5F4F;
+                border-color: #6D5F4F;
+            }
+
+            .table {
+                border-radius: 10px;
+                overflow: hidden;
+            }
+
+            .table thead {
+                background-color: var(--cafe-oscuro);
+                color: #ffffff;
+            }
+
+            .table thead th {
+                border: none;
+                padding: 15px;
+                font-weight: 600;
+            }
+
+            .table tbody tr {
+                transition: background-color 0.2s ease;
+            }
+
+            .table tbody tr:hover {
+                background-color: var(--cafe-fondo);
+            }
+
+            .table tbody td {
+                padding: 12px 15px;
+                border-color: #e0e0e0;
+            }
+
+            .badge.bg-success {
+                background-color: var(--cafe-claro) !important;
+            }
+
+            .badge.bg-warning {
+                background-color: var(--cafe-beige) !important;
+                color: var(--cafe-oscuro) !important;
+            }
+
+            .alert-info {
+                background-color: var(--cafe-fondo);
+                border-color: var(--cafe-beige);
+                color: var(--cafe-oscuro);
+            }
+        </style>
     </h:head>
 
     <h:body>
@@ -15,7 +99,7 @@
         <f:event type="preRenderView" listener="#{clienteBean.cargarMisMovimientos}" />
         
         <div class="container my-5">
-            <h2 class="text-center text-info mb-4">Mis Movimientos</h2>
+            <h2 class="text-center mb-4">Mis Movimientos</h2>
             
             <h:form>
                 <div class="mb-3">
@@ -61,7 +145,7 @@
                 
                 <h:panelGroup rendered="#{empty clienteBean.misMovimientos}">
                     <div class="alert alert-info text-center" role="alert">
-                        <h4 class="alert-heading">📋 No hay movimientos registrados</h4>
+                        <h4 class="alert-heading">No hay movimientos registrados</h4>
                         <p class="mb-0">No se han realizado movimientos a tu nombre hasta el momento.</p>
                     </div>
                 </h:panelGroup>

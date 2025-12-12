@@ -5,14 +5,15 @@
     <h:head>
         <title>Error de Acceso</title>
         <style>
-            /* Paleta de colores para el error */
             :root {
-                --error-background: #ffe6e6; /* Fondo rojo muy suave */
-                --error-text: #8d0000; /* Rojo oscuro para el mensaje */
-                --border-color: #ff3333; /* Rojo brillante para el borde */
-                --button-color: #6c757d; /* Gris secundario para el botón de regreso */
-                --button-hover: #5a6268;
-                --background-color: #f8f9fa; /* Fondo general claro */
+                --cafe-oscuro: #4A2C2A;
+                --cafe-medio: #6D4C41;
+                --cafe-claro: #8B5E3C;
+                --cafe-beige: #D7B08B;
+                --cafe-fondo: #F5E6D3;
+                --error-background: #ffe6e6;
+                --error-text: #8d0000;
+                --border-color: #ff3333;
             }
 
             body {
@@ -23,54 +24,53 @@
                 justify-content: center;
                 align-items: center;
                 min-height: 100vh;
-                background-color: var(--background-color);
+                background: linear-gradient(135deg, var(--cafe-fondo) 0%, #E8D5C4 100%);
             }
 
-            /* ⚠️ Contenedor del Mensaje de Error */
             .error-box {
                 width: 100%;
-                max-width: 450px;
-                padding: 30px;
+                max-width: 500px;
+                padding: 40px;
                 background-color: var(--error-background);
-                border: 2px solid var(--border-color);
-                border-radius: 12px;
-                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+                border: 3px solid var(--border-color);
+                border-radius: 15px;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
                 text-align: center;
             }
 
-            /* ❌ Mensaje de Título */
             h1 {
                 color: var(--error-text);
                 font-size: 2.5em;
-                margin-bottom: 5px;
+                margin-bottom: 10px;
+                font-weight: 600;
             }
 
-            /* 💬 Mensaje de Error Específico */
             h3 {
                 color: var(--error-text);
                 font-size: 1.2em;
-                margin-top: 5px;
+                margin-top: 10px;
                 margin-bottom: 30px;
-                font-weight: 400; /* No tan negrita para un look más suave */
+                font-weight: 400;
             }
             
-            /* ↩️ Botón de Regreso */
             .back-button {
-                background-color: var(--button-color);
+                background-color: var(--cafe-claro);
                 color: white;
                 border: none;
-                padding: 12px 25px;
+                padding: 14px 30px;
                 font-size: 1em;
                 font-weight: 600;
-                border-radius: 6px;
+                border-radius: 8px;
                 cursor: pointer;
-                text-decoration: none; /* Si se usa un h:outputLink o similar */
-                transition: background-color 0.3s ease, transform 0.1s ease;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                display: inline-block;
             }
 
             .back-button:hover {
-                background-color: var(--button-hover);
-                transform: translateY(-1px);
+                background-color: var(--cafe-medio);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(139, 94, 60, 0.3);
             }
         </style>
     </h:head>
@@ -78,7 +78,7 @@
         
         <div class="error-box">
             
-            <h1>❌ Acceso Denegado</h1>
+            <h1>Acceso Denegado</h1>
             
             <h3>Documento y/o Contraseña no válidos. Por favor, inténtelo de nuevo.</h3>
       

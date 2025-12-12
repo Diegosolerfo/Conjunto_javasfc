@@ -8,6 +8,104 @@
         <title>Administrar Inventario</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
               rel="stylesheet"/>
+        <style>
+            :root {
+                --cafe-oscuro: #4A2C2A;
+                --cafe-medio: #6D4C41;
+                --cafe-claro: #8B5E3C;
+                --cafe-beige: #D7B08B;
+                --cafe-fondo: #F5E6D3;
+            }
+
+            body {
+                background: linear-gradient(135deg, var(--cafe-fondo) 0%, #E8D5C4 100%);
+                min-height: 100vh;
+                padding: 20px 0;
+            }
+
+            .container {
+                background-color: #ffffff;
+                border-radius: 15px;
+                padding: 30px;
+                box-shadow: 0 8px 30px rgba(74, 44, 42, 0.15);
+            }
+
+            h2 {
+                color: var(--cafe-oscuro);
+                font-weight: 500;
+                margin-bottom: 20px;
+            }
+
+            h3 {
+                color: var(--cafe-medio);
+                font-weight: 400;
+                margin-bottom: 20px;
+            }
+
+            .btn-link {
+                color: var(--cafe-claro);
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+            .btn-link:hover {
+                color: var(--cafe-medio);
+            }
+
+            .btn-primary {
+                background-color: var(--cafe-claro);
+                border-color: var(--cafe-claro);
+                color: white;
+                font-weight: 600;
+            }
+
+            .btn-primary:hover {
+                background-color: var(--cafe-medio);
+                border-color: var(--cafe-medio);
+            }
+
+            .table {
+                border-radius: 10px;
+                overflow: hidden;
+            }
+
+            .table thead {
+                background-color: var(--cafe-oscuro);
+                color: #ffffff;
+            }
+
+            .table thead th {
+                border: none;
+                padding: 15px;
+                font-weight: 600;
+            }
+
+            .table tbody tr {
+                transition: background-color 0.2s ease;
+            }
+
+            .table tbody tr:hover {
+                background-color: var(--cafe-fondo);
+            }
+
+            .table tbody td {
+                padding: 12px 15px;
+                border-color: #e0e0e0;
+            }
+
+            .btn-info {
+                background-color: var(--cafe-beige);
+                border-color: var(--cafe-beige);
+                color: var(--cafe-oscuro);
+                font-weight: 600;
+            }
+
+            .btn-info:hover {
+                background-color: var(--cafe-claro);
+                border-color: var(--cafe-claro);
+                color: white;
+            }
+        </style>
     </h:head>
 
     <h:body>
@@ -15,13 +113,13 @@
             
             <h:form>
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h:commandLink value="Menú Anterior" class="btn btn-link text-secondary" action="/faces/admin/index" immediate="true"/>
+                    <h:commandLink value="Menú Anterior" class="btn btn-link" action="/faces/admin/index" immediate="true"/>
                     <h:commandButton value="Nuevo Item" action="#{inventarioBean.nuevo()}" class="btn btn-primary btn-sm ms-3"/>
                 </div>
                 
-                <h2 class="text-center text-primary mb-4">Administrar Inventario</h2>
+                <h2 class="text-center mb-4">Administrar Inventario</h2>
 
-                <h3 class="text-secondary mb-3">Inventario Actual</h3>
+                <h3 class="mb-3">Inventario Actual</h3>
                 
                 <h:dataTable value="#{inventarioBean.listaInventario}" var="item" 
                              class="table table-bordered table-striped table-hover">

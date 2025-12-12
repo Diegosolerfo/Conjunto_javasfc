@@ -147,8 +147,6 @@ public class UsuarioBean implements Serializable {
 
     public void guardar(){
 
-        usuario.setClave(Utils.encriptar(usuario.getClave()));
-
         uDAO.guardar(usuario);
 
     }
@@ -189,13 +187,13 @@ public class UsuarioBean implements Serializable {
 
         if (usuario.getClaveNueva() != null && !usuario.getClaveNueva().isEmpty()) {
 
-            usuario.setClave(Utils.encriptar(usuario.getClaveNueva()));
+            usuario.setClave(usuario.getClaveNueva());
 
             claveCambiada = true; // La clave fue modificada
 
         } else {
 
-            // Si no se cambió la clave, recuperamos la clave encriptada actual de la DB
+            // Si no se cambió la clave, recuperamos la clave actual de la DB
 
             Usuario tempUsuario = uDAO.buscar(usuario.getCedula());
 

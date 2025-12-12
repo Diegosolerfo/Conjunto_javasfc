@@ -8,15 +8,105 @@
         <title>Editar Movimiento</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
               crossorigin="anonymous"/>
+        <style>
+            :root {
+                --cafe-oscuro: #4A2C2A;
+                --cafe-medio: #6D4C41;
+                --cafe-claro: #8B5E3C;
+                --cafe-beige: #D7B08B;
+                --cafe-fondo: #F5E6D3;
+            }
+
+            body {
+                background: linear-gradient(135deg, var(--cafe-fondo) 0%, #E8D5C4 100%);
+                min-height: 100vh;
+                padding: 30px 0;
+            }
+
+            .form-container {
+                max-width: 800px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                padding: 40px;
+                border-radius: 15px;
+                box-shadow: 0 8px 30px rgba(74, 44, 42, 0.15);
+            }
+
+            h2 {
+                color: var(--cafe-oscuro);
+                font-weight: 500;
+                margin-bottom: 30px;
+            }
+
+            .form-label {
+                color: var(--cafe-medio);
+                font-weight: 600;
+            }
+
+            .form-control, .form-select {
+                border: 2px solid var(--cafe-beige);
+                border-radius: 8px;
+                padding: 12px;
+                transition: all 0.3s ease;
+            }
+
+            .form-control:focus, .form-select:focus {
+                border-color: var(--cafe-claro);
+                box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.15);
+                outline: none;
+            }
+
+            .btn-success {
+                background-color: var(--cafe-claro);
+                border-color: var(--cafe-claro);
+                color: white;
+                font-weight: 600;
+                padding: 12px 30px;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .btn-success:hover {
+                background-color: var(--cafe-medio);
+                border-color: var(--cafe-medio);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(139, 94, 60, 0.3);
+            }
+
+            .btn-secondary {
+                background-color: #8B7D6B;
+                border-color: #8B7D6B;
+                color: white;
+                font-weight: 600;
+                padding: 12px 30px;
+                border-radius: 8px;
+            }
+
+            .btn-secondary:hover {
+                background-color: #6D5F4F;
+                border-color: #6D5F4F;
+            }
+
+            .text-danger {
+                color: #c0392b !important;
+                font-size: 0.9em;
+            }
+
+            .ui-panelgrid {
+                width: 100%;
+            }
+
+            .ui-panelgrid td {
+                padding: 12px;
+            }
+        </style>
     </h:head>
 
     <h:body>
         <f:event type="preRenderView" listener="#{movimientoBean.verificarPermisosEdicion}" />
 
-        <h2 class="text-center text-primary">Editar Movimiento</h2>
-        <br/>
-
-        <center>
+        <div class="form-container">
+            <h2 class="text-center">Editar Movimiento</h2>
             <h:form>
 
                 <h:inputHidden value="#{movimientoBean.movimiento.id_movimiento}" />
@@ -63,16 +153,17 @@
 
                     <h:column />
                     <h:column>
-                        <h:commandButton class="btn btn-success" value="Actualizar"
-                                         action="#{movimientoBean.actualizar()}" />
-                        <h:commandButton class="btn btn-secondary" value="Cancelar" action="index"
-                                         style="margin-left: 15px;" immediate="true" />
+                        <div class="text-center">
+                            <h:commandButton class="btn btn-success" value="Actualizar"
+                                             action="#{movimientoBean.actualizar()}" />
+                            <h:commandButton class="btn btn-secondary" value="Cancelar" action="index"
+                                             style="margin-left: 15px;" immediate="true" />
+                        </div>
                     </h:column>
-
+                    <h:column />
                 </h:panelGrid>
-
             </h:form>
-        </center>
+        </div>
 
     </h:body>
 </html>

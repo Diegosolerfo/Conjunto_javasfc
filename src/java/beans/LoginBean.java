@@ -35,7 +35,7 @@ public class LoginBean implements Serializable {
     }
 
     // ------------------------------------------------------------------
-    // AUTENTICACIÓN (ENCRIPTA LA CLAVE ANTES DE COMPARAR)
+    // AUTENTICACIÓN
     // ------------------------------------------------------------------
     public void autenticar(){
         // Validar que el usuario y la clave no sean null
@@ -59,14 +59,7 @@ public class LoginBean implements Serializable {
             try (PreparedStatement ps = con.prepareStatement(sql)) {
                 
                 ps.setLong(1, usuario.getCedula());
-                // **IMPORTANTE:** Se encripta la clave ingresada para compararla con la encriptada en la BD
-                String claveEncriptada = Utils.encriptar(usuario.getClave());
-                if (claveEncriptada == null) {
-                    System.out.println("Error: No se pudo encriptar la clave");
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("error.xhtml");
-                    return;
-                }
-                ps.setString(2, claveEncriptada);
+                ps.setString(2, usuario.getClave());
                 
                 try (ResultSet rs = ps.executeQuery()) {
                     if(rs.next()){

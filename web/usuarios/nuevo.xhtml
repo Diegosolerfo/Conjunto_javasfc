@@ -5,45 +5,140 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Nuevo Usuario</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
         <style>
-            input{
-                width: 60vh;
+            :root {
+                --cafe-oscuro: #4A2C2A;
+                --cafe-medio: #6D4C41;
+                --cafe-claro: #8B5E3C;
+                --cafe-beige: #D7B08B;
+                --cafe-fondo: #F5E6D3;
+            }
+
+            body {
+                background: linear-gradient(135deg, var(--cafe-fondo) 0%, #E8D5C4 100%);
+                min-height: 100vh;
+                padding: 30px 0;
+            }
+
+            .form-container {
+                max-width: 700px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                padding: 40px;
+                border-radius: 15px;
+                box-shadow: 0 8px 30px rgba(74, 44, 42, 0.15);
+            }
+
+            h2 {
+                color: var(--cafe-oscuro);
+                font-weight: 500;
+                margin-bottom: 30px;
+            }
+
+            .form-group-custom {
+                margin-bottom: 20px;
+            }
+
+            .form-group-custom label {
+                color: var(--cafe-medio);
+                font-weight: 600;
+                margin-bottom: 8px;
+                display: block;
+            }
+
+            .form-control, .form-select {
+                border: 2px solid var(--cafe-beige);
+                border-radius: 8px;
+                padding: 12px;
+                transition: all 0.3s ease;
+            }
+
+            .form-control:focus, .form-select:focus {
+                border-color: var(--cafe-claro);
+                box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.15);
+                outline: none;
+            }
+
+            .btn-success {
+                background-color: var(--cafe-claro);
+                border-color: var(--cafe-claro);
+                padding: 12px 30px;
+                font-weight: 600;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .btn-success:hover {
+                background-color: var(--cafe-medio);
+                border-color: var(--cafe-medio);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(139, 94, 60, 0.3);
+            }
+
+            .btn-secondary {
+                background-color: #8B7D6B;
+                border-color: #8B7D6B;
+                padding: 12px 30px;
+                font-weight: 600;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+
+            .btn-secondary:hover {
+                background-color: #6D5F4F;
+                border-color: #6D5F4F;
+            }
+
+            .text-danger {
+                color: #c0392b !important;
+                font-size: 0.9em;
             }
         </style>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
     </h:head>
     <h:body>
-        <h2 class="text-center text-success">Nuevo Usuario</h2>
-        <br/>
-        <center>
+        <div class="form-container">
+            <h2 class="text-center">Nuevo Usuario</h2>
             <h:form>
-                
+                <div class="form-group-custom">
                     <h:outputLabel value="Documento: " for="doc" />
                     <h:inputText id="doc" value="#{usuarioBean.usuario.cedula}" class="form-control"
                                  required="true" requiredMessage="Debe especificar un Documento" />
                     <h:message for="doc" class="text-danger" />
-                    
-                    
+                </div>
+
+                <div class="form-group-custom">
                     <h:outputLabel for="nom" value="Nombre del Usuario: " />
                     <h:inputText id="nom" value="#{usuarioBean.usuario.nombre}" class="form-control" required="true" requiredMessage="Debe especificar un Nombre" />
                     <h:message for="nom" class="text-danger" />
-                    
+                </div>
+
+                <div class="form-group-custom">
                     <h:outputLabel for="ape" value="Apellido: " />
                     <h:inputText id="ape" value="#{usuarioBean.usuario.apellido}" class="form-control" required="true" requiredMessage="Debe especificar un Apellido" />
                     <h:message for="ape" class="text-danger" />
+                </div>
+
+                <div class="form-group-custom">
                     <h:outputLabel for="cor" value="Correo: " />
                     <h:inputText id="cor" value="#{usuarioBean.usuario.correo}" class="form-control"  />
                     <h:message for="cor" class="text-danger" />
-                    
+                </div>
+
+                <div class="form-group-custom">
                     <h:outputLabel for="pas" value="Contraseña: " />
                     <h:inputSecret id="pas" value="#{usuarioBean.usuario.clave}"  class="form-control"                                
                                  required="true" requiredMessage="Debe especificar una Contraseña" />
                     <h:message for="pas" class="text-danger" />
-                    
+                </div>
+
+                <div class="form-group-custom">
                     <h:outputLabel for="tel" value="Telefono: " />
                     <h:inputText id="tel" value="#{usuarioBean.usuario.telefono}" class="form-control" />
                     <h:message for="tel" class="text-danger" />
+                </div>
 
+                <div class="form-group-custom">
                     <h:outputLabel for="gen" value="Género: " />
                     <h:selectOneMenu id="gen" value="#{usuarioBean.usuario.genero}" class="form-select">
                         <f:selectItem itemValue="MASCULINO" itemLabel="Masculino" />
@@ -51,11 +146,15 @@
                         <f:selectItem itemValue="OTRO" itemLabel="Otro" />
                     </h:selectOneMenu>
                     <h:message for="gen" class="text-danger" />
+                </div>
 
+                <div class="form-group-custom">
                     <h:outputLabel for="fn" value="Fecha Nacimiento: " />
                     <h:inputText id="fn" value="#{usuarioBean.usuario.fecha_nacimiento}" class="form-control" />
                     <h:message for="fn" class="text-danger" />
+                </div>
 
+                <div class="form-group-custom">
                     <h:outputLabel for="tipo" value="Tipo de Usuario: " />
                     <h:selectOneMenu id="tipo" value="#{usuarioBean.usuario.tipo_usuario}"  class="form-select">
                         <f:selectItem itemValue="ADMINISTRADOR" itemLabel="Administrador" />
@@ -63,28 +162,25 @@
                         <f:selectItem itemValue="CLIENTE" itemLabel="Cliente" />
                     </h:selectOneMenu>
                     <h:message for="tipo" class="text-danger" />
+                </div>
 
+                <div class="form-group-custom">
                     <h:outputLabel for="est" value="Estado: " />
                     <h:selectOneMenu id="est" value="#{usuarioBean.usuario.estado}" class="form-select">
                         <f:selectItem itemValue="ACTIVO" itemLabel="Activo" />
                         <f:selectItem itemValue="INACTIVO" itemLabel="Inactivo" />
                     </h:selectOneMenu>
                     <h:message for="est" class="text-danger" />
+                </div>
                     
-                    <h:message for="tipo" class="text-danger" />
-                    
-                    <h:column /><h:column><br/></h:column><h:column />
-                    
-                    <h:column />
-                    <h:column>
-                        <h:commandButton class="btn btn-success" value="Guardar" 
-                                         actionListener="#{usuarioBean.guardar()}" action="index" />
-                        <h:commandButton class="btn btn-secondary" value="Cancelar" action="index" 
-                                         style="margin-left: 15px;" immediate="true" />
-                    </h:column>
-                    
-                
+                <div class="text-center mt-4">
+                    <h:commandButton class="btn btn-success" value="Guardar" 
+                                     actionListener="#{usuarioBean.guardar()}" action="index" />
+                    <h:commandButton class="btn btn-secondary" value="Cancelar" action="index" 
+                                     style="margin-left: 15px;" immediate="true" />
+                </div>
+
             </h:form>
-        </center>
+        </div>
     </h:body>
 </html>
